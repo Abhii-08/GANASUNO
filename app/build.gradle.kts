@@ -99,8 +99,8 @@ tasks.register("generateDependencyInventory") {
     group = "verification"
     description = "Resolve Full and Privacy runtime artifacts and collect embedded license/notice text"
     doLast {
-        val out = file("src/main/assets/resolved_dependencies.txt")
-        val artifactRows = listOf("fossDebugRuntimeClasspath", "fullDebugRuntimeClasspath").flatMap { name ->
+        val out = rootProject.file("release-license-inventory.txt")
+        val artifactRows = listOf("fossReleaseRuntimeClasspath", "coreLibraryDesugaring").flatMap { name ->
             configurations.getByName(name).resolvedConfiguration.resolvedArtifacts.toList()
         }.distinctBy { it.moduleVersion.id.toString() + ":" + it.name }.sortedBy { it.moduleVersion.id.toString() }
         val report = buildString {
