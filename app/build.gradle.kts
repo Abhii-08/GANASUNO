@@ -1,6 +1,9 @@
 import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
 import java.io.ByteArrayOutputStream
+import java.io.OutputStream
+import java.security.DigestInputStream
+import java.security.MessageDigest
 
 plugins {
     id("com.android.application")
@@ -92,21 +95,55 @@ dependencies {
     implementation("com.github.maxrave-dev:BravePipeExtractor:105aad96c7")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
+
+    testImplementation("junit:junit:4.13.2")
 }
 
-// Optional auditing task: inspect actual resolved runtime archives, never invent a licence.
+val releaseArtifacts = {
+    listOf("fossReleaseRuntimeClasspath", "coreLibraryDesugaring").flatMap { name ->
+        configurations.getByName(name).resolvedConfiguration.resolvedArtifacts.toList()
+    }.distinctBy { it.moduleVersion.id.toString() + ":" + it.name }.sortedBy { it.moduleVersion.id.toString() }
+}
+
+tasks.register("verifyReleaseDependencies") {
+    group = "verification"
+    description = "Verify the FOSS release runtime and desugaring artifact SHA-256 checksums"
+    doLast {
+        val entries = rootProject.file("docs/licenses/RELEASE-DEPENDENCY-SHA256SUMS.txt").readLines()
+            .filter { it.isNotBlank() }
+        val expected = entries.associate { line ->
+            val (hash, coordinate) = line.split("  ", limit = 2)
+            require(hash.matches(Regex("[0-9a-f]{64}"))) { "Invalid SHA-256 for $coordinate" }
+            coordinate to hash
+        }
+        val artifacts = releaseArtifacts()
+        val coordinates = artifacts.map { it.moduleVersion.id.toString() }
+        check(expected.size == entries.size && coordinates.size == expected.size && coordinates.toSet() == expected.keys) {
+            "Resolved release coordinates differ from the verified checksum list"
+        }
+        for (artifact in artifacts) {
+            val digest = MessageDigest.getInstance("SHA-256")
+            DigestInputStream(artifact.file.inputStream(), digest).use { input ->
+                input.transferTo(OutputStream.nullOutputStream())
+            }
+            val hash = digest.digest().joinToString("") { "%02x".format(it) }
+            val coordinate = artifact.moduleVersion.id.toString()
+            check(hash == expected.getValue(coordinate)) { "Release dependency checksum mismatch: $coordinate" }
+        }
+        println("Verified SHA-256 checksums for ${artifacts.size} FOSS release and desugaring artifacts")
+    }
+}
+
+// Optional auditing task: inspect actual resolved runtime archives.
 tasks.register("generateDependencyInventory") {
     group = "verification"
-    description = "Resolve Full and Privacy runtime artifacts and collect embedded license/notice text"
+    description = "Resolve FOSS release artifacts and collect embedded license and notice text"
     doLast {
         val out = rootProject.file("release-license-inventory.txt")
-        val artifactRows = listOf("fossReleaseRuntimeClasspath", "coreLibraryDesugaring").flatMap { name ->
-            configurations.getByName(name).resolvedConfiguration.resolvedArtifacts.toList()
-        }.distinctBy { it.moduleVersion.id.toString() + ":" + it.name }.sortedBy { it.moduleVersion.id.toString() }
         val report = buildString {
             appendLine("Resolved dependencies — actual runtime archives")
             appendLine("Embedded notices are not a complete legal review. Missing text must be obtained from upstream.")
-            for (artifact in artifactRows) {
+            for (artifact in releaseArtifacts()) {
                 appendLine("\n${artifact.moduleVersion.id} (${artifact.name})")
                 val texts = runCatching {
                     ZipFile(artifact.file).use { zip ->

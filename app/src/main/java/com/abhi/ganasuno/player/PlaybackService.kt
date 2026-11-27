@@ -1,10 +1,11 @@
+@file:androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+
 package com.abhi.ganasuno.player
 
 import android.net.Uri
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
 import com.abhi.ganasuno.data.LibraryStore
@@ -26,14 +27,23 @@ import java.io.IOException
  * Background playback. Queue items carry a fake "ganasuno://play/<videoId>" URI; the real stream URL
  * is looked up lazily, right when ExoPlayer opens the item.
  */
-@OptIn(UnstableApi::class)
 class PlaybackService : MediaSessionService() {
     private var session: MediaSession? = null
     private var transitions:AndroidTransitions?=null
     private val communitySkipper=CommunitySkipper({PlayerHub.player},{PlayerHub.player?.currentMediaItem?.takeIf{it.mediaMetadata.extras?.getBoolean("live")!=true && it.mediaMetadata.extras?.getString("localUri").isNullOrBlank()}?.mediaId})
     private val mixWorker = java.util.concurrent.Executors.newSingleThreadExecutor()
     private var mixBusy = false
-    private var attemptedMix = ""
+    private var mixRevision = 0L
+    private var mixRequestRevision = -1L
+    private var mixRetryAt = 0L
+    private var pendingNext: ((Boolean) -> Unit)? = null
+    private val recentMixIds = linkedSetOf<String>()
+
+    private fun invalidateMix() {
+        mixRevision++
+        mixRetryAt = 0L
+        pendingNext = null
+    }
     private var retriedItem = ""
     @Volatile private var preloaded = ""
     private val preloadBusy=java.util.concurrent.atomic.AtomicBoolean(false)
@@ -72,17 +82,46 @@ class PlaybackService : MediaSessionService() {
             }
         }}finally{preloadBusy.set(false)}}
     }
-    private fun extendQueue(p: androidx.media3.exoplayer.ExoPlayer) {
-        if(LibraryStore.option("endless")!=1 || mixBusy || !p.isPlaying || p.repeatMode!=Player.REPEAT_MODE_OFF || p.hasNextMediaItem())return
-        val item=p.currentMediaItem?:return
-        if(item.mediaMetadata.extras?.getBoolean("live")==true)return
-        val localUri=item.mediaMetadata.extras?.getString("localUri").orEmpty()
-        val offline=localUri.isNotBlank()
-        val artist=item.mediaMetadata.artist?.toString().orEmpty()
-        if(artist.isBlank()&&item.mediaMetadata.albumTitle.isNullOrBlank())return
-        if(p.mediaItemCount>=500 || attemptedMix==item.mediaId)return
-        attemptedMix=item.mediaId;mixBusy=true
-        val previous=(0 until p.mediaItemCount).map{p.getMediaItemAt(it).mediaId}.toSet()
+    private fun extendQueue(p: ExoPlayer, onNext: ((Boolean) -> Unit)? = null) {
+        val item = p.currentMediaItem
+        val repeatOff = p.repeatMode == Player.REPEAT_MODE_OFF
+        var ahead = 0
+        if (item != null && repeatOff && onNext == null) {
+            var index = p.currentMediaItemIndex
+            while (ahead <= EndlessQueuePolicy.LOW_WATER) {
+                index = p.currentTimeline.getNextWindowIndex(index, Player.REPEAT_MODE_OFF, p.shuffleModeEnabled)
+                if (index == C.INDEX_UNSET) break
+                ahead++
+            }
+        }
+        if (item == null || PlayerHub.roomActive || SleepTimer.untilSongEnd ||
+            !EndlessQueuePolicy.shouldRefill(
+                LibraryStore.option("endless") == 1, p.isPlaying, onNext != null, repeatOff,
+                item.mediaMetadata.extras?.getBoolean("live") == true, ahead
+            ) || !repeatOff || (onNext != null && p.hasNextMediaItem())
+        ) {
+            onNext?.invoke(false)
+            return
+        }
+        val localUri = item.mediaMetadata.extras?.getString("localUri").orEmpty()
+        val offline = localUri.isNotBlank()
+        val artist = item.mediaMetadata.artist?.toString().orEmpty()
+        if (artist.isBlank() && item.mediaMetadata.albumTitle.isNullOrBlank()) {
+            onNext?.invoke(false)
+            return
+        }
+        if (mixBusy) {
+            if (onNext != null && pendingNext == null) {
+                if (mixRequestRevision == mixRevision) pendingNext = onNext else onNext(false)
+            }
+            return
+        }
+        if (onNext == null && SystemClock.elapsedRealtime() < mixRetryAt) return
+        pendingNext = onNext
+        mixBusy = true
+        val revision = mixRevision
+        mixRequestRevision = revision
+        val previous = (0 until p.mediaItemCount).map { p.getMediaItemAt(it).mediaId }.toSet() + recentMixIds
         mixWorker.execute {
             val seed=Song(item.mediaId,item.mediaMetadata.title?.toString().orEmpty(),artist,"","",localUri=localUri,album=item.mediaMetadata.albumTitle?.toString().orEmpty())
             val found=runCatching {
@@ -94,20 +133,53 @@ class PlaybackService : MediaSessionService() {
                 val tags=LibraryStore.albumTags()
                 com.abhi.ganasuno.data.Batch18.eligible(seed.copy(album=tags[seed.id]?:seed.album), (saved+remote).map{it.copy(album=tags[it.id]?:it.album)}, related, previous,{s->
                     LibraryStore.allowed(s.id)&&(!offline||runCatching{contentResolver.openAssetFileDescriptor(Uri.parse(s.localUri),"r")?.use{true}?:false}.getOrDefault(false))
-                })
+                }, limit = EndlessQueuePolicy.BATCH_SIZE)
             }.getOrDefault(emptyList())
-            handler.post { mixBusy=false;if(PlayerHub.player!==p||p.currentMediaItem?.mediaId!=item.mediaId||p.hasNextMediaItem()||LibraryStore.option("endless")!=1)return@post
-                val currentIds=(0 until p.mediaItemCount).map{p.getMediaItemAt(it).mediaId}.toSet()
-                val fresh=found.filter{it.id !in currentIds&&LibraryStore.allowed(it.id)}.take((500-p.mediaItemCount).coerceAtLeast(0))
-                if(fresh.isNotEmpty()){
-                    val firstNew=p.mediaItemCount
-                    val resumeEnded=p.playWhenReady&&p.playbackState==Player.STATE_ENDED && !PlayerHub.roomActive && !SleepTimer.untilSongEnd
-                    p.addMediaItems(fresh.map{s->
-                    val extras=android.os.Bundle().apply{putString("localUri",s.localUri);putBoolean("live",false);p.currentMediaItem?.mediaMetadata?.extras?.getString(com.abhi.ganasuno.ui.PlaylistGreeting.SOURCE_KEY)?.let{putString(com.abhi.ganasuno.ui.PlaylistGreeting.SOURCE_KEY,it)}}
-                    androidx.media3.common.MediaItem.Builder().setMediaId(s.id).setUri(s.localUri.ifBlank{"$SCHEME://play/${s.id}"}).setMediaMetadata(androidx.media3.common.MediaMetadata.Builder().setTitle(s.title).setArtist(s.artist).setAlbumTitle(s.album.takeIf{it.isNotBlank()}).setArtworkUri(s.thumb.takeIf{it.isNotBlank()}?.let{Uri.parse(it)}).setExtras(extras).build()).build()
-                    })
-                    if(resumeEnded&&p.playWhenReady){p.seekTo(firstNew,0L);if(p.playbackState==Player.STATE_IDLE)p.prepare();p.play()}
+            handler.post {
+                mixBusy = false
+                val advance = pendingNext
+                pendingNext = null
+                if (PlayerHub.player !== p || revision != mixRevision || p.currentMediaItem !== item ||
+                    p.repeatMode != Player.REPEAT_MODE_OFF || PlayerHub.roomActive || SleepTimer.untilSongEnd ||
+                    LibraryStore.option("endless") != 1
+                ) {
+                    advance?.invoke(false)
+                    return@post
                 }
+                val fresh = found.filter { LibraryStore.allowed(it.id) }
+                if (fresh.isEmpty()) {
+                    mixRetryAt = SystemClock.elapsedRealtime() + EndlessQueuePolicy.RETRY_MS
+                    advance?.invoke(false)
+                    return@post
+                }
+                val trim = EndlessQueuePolicy.trimPrefix(p.currentMediaItemIndex, p.shuffleModeEnabled)
+                if (trim > 0) p.removeMediaItems(0, trim)
+                val firstNew = p.mediaItemCount
+                val resumeEnded = p.playWhenReady && p.playbackState == Player.STATE_ENDED
+                p.addMediaItems(fresh.map { song ->
+                    val extras = android.os.Bundle().apply {
+                        putString("localUri", song.localUri)
+                        putBoolean("live", false)
+                        item.mediaMetadata.extras?.getString(com.abhi.ganasuno.ui.PlaylistGreeting.SOURCE_KEY)
+                            ?.let { putString(com.abhi.ganasuno.ui.PlaylistGreeting.SOURCE_KEY, it) }
+                    }
+                    androidx.media3.common.MediaItem.Builder()
+                        .setMediaId(song.id)
+                        .setUri(song.localUri.ifBlank { "$SCHEME://play/${song.id}" })
+                        .setMediaMetadata(androidx.media3.common.MediaMetadata.Builder()
+                            .setTitle(song.title).setArtist(song.artist)
+                            .setAlbumTitle(song.album.takeIf { it.isNotBlank() })
+                            .setArtworkUri(song.thumb.takeIf { it.isNotBlank() }?.let(Uri::parse))
+                            .setExtras(extras).build())
+                        .build()
+                })
+                if (advance != null || (resumeEnded && p.playWhenReady)) {
+                    PlayerHub.cancelTransition?.invoke()
+                    if (p.hasNextMediaItem()) p.seekToNextMediaItem() else p.seekTo(firstNew, 0L)
+                    if (p.playbackState == Player.STATE_IDLE) p.prepare()
+                    p.play()
+                }
+                advance?.invoke(true)
             }
         }
     }
@@ -187,7 +259,19 @@ class PlaybackService : MediaSessionService() {
                         handler.postDelayed({ if(PlayerHub.player===player && player.currentMediaItem?.mediaId==id && player.playWhenReady && player.playerError!=null){player.prepare()} },350L)
                     }
                 }
+                override fun onTimelineChanged(timeline: androidx.media3.common.Timeline, reason: Int) {
+                    if (reason == Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED) invalidateMix()
+                }
+                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                    if (!playWhenReady) pendingNext = null
+                }
                 override fun onMediaItemTransition(mediaItem: androidx.media3.common.MediaItem?, reason:Int){
+                    invalidateMix()
+                    mediaItem?.mediaId?.let { id ->
+                        recentMixIds.remove(id)
+                        recentMixIds.add(id)
+                        if (recentMixIds.size > EndlessQueuePolicy.RECENT_LIMIT) recentMixIds.remove(recentMixIds.first())
+                    }
                     track(mediaItem);wasPlaying=player.isPlaying
                     com.abhi.ganasuno.data.Diagnostics.event("Track transition reason $reason")
                     if(mediaItem?.mediaId!=retriedItem)retriedItem=""
@@ -207,9 +291,24 @@ class PlaybackService : MediaSessionService() {
         player.repeatMode = LibraryStore.option("repeat", Player.REPEAT_MODE_OFF).coerceIn(0,2)
         player.shuffleModeEnabled = LibraryStore.option("shuffle") == 1
         transitions=AndroidTransitions(this,player,resolving,primarySweep)
+        PlayerHub.extendQueueForNext = { callback -> extendQueue(player, callback) }
         PlayerHub.cancelTransition={transitions?.cancel()}
         PlayerHub.transitionActive={transitions?.active==true}
-        session = MediaSession.Builder(this, player).build()
+        session = MediaSession.Builder(this, player)
+            .setCallback(object : MediaSession.Callback {
+                override fun onConnect(
+                    session: MediaSession,
+                    controller: MediaSession.ControllerInfo,
+                ): MediaSession.ConnectionResult {
+                    if (controller.uid != applicationInfo.uid && !controller.isTrusted &&
+                        !session.isMediaNotificationController(controller)
+                    ) {
+                        return MediaSession.ConnectionResult.reject()
+                    }
+                    return super.onConnect(session, controller)
+                }
+            })
+            .build()
         lastTick = SystemClock.elapsedRealtime()
         handler.post(tracking)
         communitySkipper.start()
@@ -238,6 +337,8 @@ class PlaybackService : MediaSessionService() {
         transitions?.close();transitions=null;PlayerHub.cancelTransition=null;PlayerHub.transitionActive=null
         communitySkipper.close()
         handler.removeCallbacks(tracking)
+        PlayerHub.extendQueueForNext = null
+        invalidateMix()
         mixWorker.shutdownNow()
         preloadActive=false
         preloadWorker.shutdownNow()

@@ -1,3 +1,4 @@
+from release_metadata import assert_release_metadata
 """Static checks of the titanium action theme and settings control wiring."""
 from pathlib import Path
 import unittest
@@ -49,7 +50,5 @@ class TitaniumGrey(unittest.TestCase):
   self.assertEqual(icon.find('path').get(A+'strokeLineCap'),'round')
   self.assertEqual(icon.find('path').get(A+'pathData').count('M'),3)
  def test_version(self):
-  s=(ROOT/'app/build.gradle.kts').read_text()
-  self.assertIn('versionCode = 111',s)
-  self.assertIn('versionName = "45.0"',s)
+  assert_release_metadata(self, ROOT)
 if __name__=='__main__':unittest.main()

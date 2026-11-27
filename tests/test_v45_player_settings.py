@@ -33,5 +33,5 @@ class V45(unittest.TestCase):
   self.assertIn('MiniPlaybackUi.resolve',p);self.assertIn('loading.visibility=if(state.showLoading)',p)
  def test_existing_mix_resume(self):
   s=(SRC/'player/PlaybackService.kt').read_text()
-  self.assertIn('val resumeEnded=p.playWhenReady&&p.playbackState==Player.STATE_ENDED',s)
-  self.assertIn('if(resumeEnded&&p.playWhenReady)',s)
+  self.assertIn('val resumeEnded = p.playWhenReady && p.playbackState == Player.STATE_ENDED',s)
+  self.assertIn('if (advance != null || (resumeEnded && p.playWhenReady))',s)

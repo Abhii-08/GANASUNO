@@ -9,12 +9,12 @@ from native_queue import Queue
 class NativeQueueTests(unittest.TestCase):
     def test_queue(self):
         with tempfile.TemporaryDirectory() as root:
-            a, b, c = [Path(root) / (name + '.wav') for name in 'abc']
+            a, b, c = [Path(root).resolve() / (name + '.wav') for name in 'abc']
             for f in (a, b, c):
                 f.touch()
             q = Queue()
             self.assertIsNone(q.step(1))
-            q.add([a, b, c, a, Path(root) / 'missing'])
+            q.add([a, b, c, a, Path(root).resolve() / 'missing'])
             self.assertEqual(q.files, [a, b, c])
             self.assertEqual(q.index, 0)
             self.assertEqual(q.step(1), b)

@@ -1,19 +1,45 @@
+"""Verify production paths are wired to the endless-queue policy."""
 import unittest
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]
-BASE=ROOT/'app/src/main/java/com/abhi/ganasuno'
-S=(BASE/'player/PlaybackService.kt').read_text(); A=(BASE/'MainActivity.kt').read_text()
+
+BASE = Path(__file__).resolve().parents[1] / "app/src/main/java/com/abhi/ganasuno"
+SERVICE = (BASE / "player/PlaybackService.kt").read_text(encoding="utf-8")
+ACTIVITY = (BASE / "MainActivity.kt").read_text(encoding="utf-8")
+
+
 class EndlessQueue(unittest.TestCase):
- def test_next_paths(self):
-  self.assertIn('b.miniNext.setOnClickListener { nextTrack() }',A)
-  self.assertIn('button(controls,"››"){nextTrack()}',A)
-  self.assertIn('else nextTrack()',A)
-  self.assertIn('PlayerHub.nextTrack = { requestNext(player) }',S)
- def test_refill_and_retry(self):
-  self.assertIn('LibraryStore.option("endless",1)==1',S)
-  self.assertIn('EndlessQueuePolicy.shouldRefill',S)
-  self.assertIn('mixRetryAt=SystemClock.elapsedRealtime()+EndlessQueuePolicy.RETRY_MS',S)
-  self.assertNotIn('attemptedMix',S);self.assertNotIn('p.mediaItemCount>=500',S)
- def test_safe_append(self):
-  for x in ['generation!=mixGeneration','current !in original','LibraryStore.allowed(it.id)','p.addMediaItems','if(advance && p.currentMediaItem==current)','PlayerHub.roomActive','recentMixIds','trimPrefix']:
-   self.assertIn(x,S)
+    def test_next_paths(self):
+        for expected in (
+            "b.miniNext.setOnClickListener { skipTrack(true) }",
+            'transport(R.drawable.ic_next,"Next track"){skipTrack(true)}',
+            "else skipTrack(true)",
+            "1->skipTrack(true);2->closeMini()",
+            "PlayerHub.extendQueueForNext",
+        ):
+            self.assertIn(expected, ACTIVITY)
+        self.assertIn("PlayerHub.extendQueueForNext = { callback -> extendQueue(player, callback) }", SERVICE)
+
+    def test_refill_and_retry(self):
+        for expected in (
+            'LibraryStore.option("endless") == 1',
+            "EndlessQueuePolicy.shouldRefill",
+            "getNextWindowIndex(index, Player.REPEAT_MODE_OFF, p.shuffleModeEnabled)",
+            "mixRetryAt = SystemClock.elapsedRealtime() + EndlessQueuePolicy.RETRY_MS",
+            "onNext == null && SystemClock.elapsedRealtime() < mixRetryAt",
+        ):
+            self.assertIn(expected, SERVICE)
+        self.assertNotIn("attemptedMix", SERVICE)
+        self.assertNotRegex(SERVICE, r"mediaItemCount\s*>=\s*500")
+
+    def test_safe_append(self):
+        for expected in (
+            "revision != mixRevision",
+            "p.currentMediaItem !== item",
+            "LibraryStore.allowed(it.id)",
+            "p.addMediaItems",
+            "pendingNext = null",
+            "PlayerHub.roomActive",
+            "recentMixIds",
+            "EndlessQueuePolicy.trimPrefix",
+        ):
+            self.assertIn(expected, SERVICE)

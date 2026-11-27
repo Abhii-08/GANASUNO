@@ -20,6 +20,7 @@ A native Android music player with a premium glass-inspired interface, personali
 [Features](#features) · [Installation](#installation) · [Updates](#updates) · [Build from source](#build-from-source) · [Developer](#developer)
 
 <!-- After the repository and first signed release are published, replace the launch-preview text above with the following live release links and badges. Do not show a working download claim until the APK exists.
+[![Android build](https://github.com/Abhii-08/GANASUNO/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Abhii-08/GANASUNO/actions/workflows/build.yml)
 [![Download Latest APK](https://img.shields.io/badge/Download-Latest%20APK-238636?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Abhii-08/GANASUNO/releases/latest/download/GANASUNO.apk)
 [![Release](https://img.shields.io/github/v/release/Abhii-08/GANASUNO)](https://github.com/Abhii-08/GANASUNO/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/Abhii-08/GANASUNO/total)](https://github.com/Abhii-08/GANASUNO/releases)
@@ -96,7 +97,7 @@ The following describes features present in the development source, not a certif
 - Listen Together room controls and suggestions with compatible backend; interoperability is partial.
 - User-configured OpenAI, Gemini and compatible AI endpoints; no bundled private credentials.
 - FOSS/Full build variants, diagnostics, log viewer, developer options, crash reporting tools and dependency notices.
-- Existing configurable update checker and stable/nightly channels; official signed GitHub release integration is planned for v1.1.
+- Existing configurable update checker and stable/nightly channels; the stable channel uses the official GitHub Releases API.
 
 ### Full feature catalogue
 
@@ -382,15 +383,11 @@ The retained [200-feature status matrix](docs/FEATURE_STATUS_200.csv) records ea
 
 ## Screenshots
 
-The launch README will include real screenshots of Listen Now, Search, the four Library groups, Now Playing, categorized Settings and the About / update screens. Capture these from a verified v1.1 build, using non-personal sample data.
-
-<!-- Add actual screenshots in docs/screenshots/ before publishing, for example:
 <p align="center">
-<img src="docs/screenshots/home.png" width="220" alt="Listen Now">
-<img src="docs/screenshots/player.png" width="220" alt="Now Playing">
-<img src="docs/screenshots/settings.png" width="220" alt="Settings">
+<img src="docs/screenshots/library.png" width="220" alt="GANASUNO Library">
+<img src="docs/screenshots/settings.png" width="220" alt="GANASUNO Settings">
+<img src="docs/screenshots/updates.png" width="220" alt="GANASUNO software update settings">
 </p>
--->
 
 ## Installation
 
@@ -402,9 +399,13 @@ Requirements: Android 8.0 (API 26) or newer, internet for online features, and l
 
 The default stable update source is the official GitHub Releases API. Automatic checks are opt-in; a newer release opens the APK download in the browser for user-approved installation. Official nightly releases are not yet configured.
 
-Planned release flow: GitHub Actions tests each push; a stable version tag builds a signed APK and publishes the release, changelog and version metadata. The app's updater checks the stable release metadata, compares numeric version codes and offers a user-confirmed update when a newer compatible APK exists. No silent installation is promised. Nightly builds should not overwrite the stable channel.
+GitHub Actions compiles and checks pushes. After maintainer approval, a stable version tag builds and verifies the APK, then publishes the APK, SHA-256 checksums and corresponding source. The updater compares numeric version codes and opens the official download in the browser after you confirm. Android checks package compatibility and asks before installing.
 
-Public version name: `1.1`. Launch versionCode: `112` or higher than any deployed build. Retain the same application ID and signing certificate for all compatible upgrades. Store signing credentials in protected GitHub Actions Secrets, never in source. Publish only tested releases.
+Public version name: `1.1`. Launch versionCode: `112`. Retain the same application ID and signing certificate for all compatible upgrades. Store signing credentials in protected GitHub Actions Secrets, never in source. Publish only tested releases.
+
+## Privacy
+
+Your local library and preferences are stored on your device. Online search, playback and lyrics send the requests required by those features to their providers. Optional scrobbling, AI and community features send data to the provider or server you configure. Optional update checks request release metadata from GitHub. Review the external service notes before enabling an integration. [Service review](docs/SERVICE_COMPLIANCE.md)
 
 ## Build from source
 
@@ -418,7 +419,7 @@ Public version name: `1.1`. Launch versionCode: `112` or higher than any deploye
 | Playback | AndroidX Media3 |
 | Application ID | `com.abhi.ganasuno` |
 
-After repository creation, clone and open the existing project in Android Studio:
+With repository access, clone the project and open it in Android Studio.
 
 ```bash
 git clone https://github.com/Abhii-08/GANASUNO.git
@@ -431,13 +432,13 @@ Configure SDK 36 and Gradle JDK 17, keep internet enabled for dependency resolut
 .\gradlew.bat :app:assembleFossDebug
 ```
 
-On Linux/macOS use `./gradlew :app:assembleFossDebug`. Output after a successful build: `app/build/outputs/apk/foss/debug/app-foss-debug.apk`. The existing GitHub Actions workflow builds debug artifacts; a tag-triggered signing workflow is included but has not been run. See [release setup](docs/RELEASE_SETUP.md). See [server documentation](server/README.md) for features requiring a hosted backend, and [desktop documentation](desktop/README.md) for the experimental offline companion.
+On Linux/macOS use `sh ./gradlew :app:assembleFossDebug`. Output after a successful build: `app/build/outputs/apk/foss/debug/app-foss-debug.apk`. The existing GitHub Actions workflow builds debug artifacts; public publishing is gated on maintainer approval. See [release setup](docs/RELEASE_SETUP.md). See [server documentation](server/README.md) for features requiring a hosted backend, and [desktop documentation](desktop/README.md) for the experimental offline companion.
 
 ## Project status and limitations
 
 - Development baseline v45.0 (versionCode 111). The public v1.1 candidate (versionCode 112) is not yet a published build.
-- Android APK compilation was blocked by dependency download/DNS in the prior documented verification; on-device testing of this baseline is incomplete.
-- A remaining queue-boundary report (Next displays End of queue) needs device investigation. No new playback changes are included in this launch candidate.
+- The FOSS and Full debug candidates compile under JDK 17. Signed in-place update verification is pending.
+- In-app Next can refill the queue when Endless artist mix is enabled and eligible tracks are available.
 - Online integrations are unofficial and depend on provider availability, authorization and changes. No guarantees of ad-free access, a specific bitrate, complete catalogue availability or downloads of restricted media. Use only content you are authorized to access.
 - Some integrations require API keys, compatible external services or backend deployment. Phone/desktop sync, Google Cast, Android Auto and complete account login are not implemented in the original audit.
 

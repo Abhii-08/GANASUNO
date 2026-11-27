@@ -22,7 +22,8 @@ object AnimatedCover {
     @Synchronized fun clearRemote(c:Context)=remoteEntries(c).count{it.delete()}
     @Synchronized fun remove(c:Context,id:String){file(c,id).delete();remoteFile(c,id).delete()}
     fun fetch(c:Context,id:String,raw:String){
-        require(Build.VERSION.SDK_INT>=28){"Android 9+ required"};val url=com.abhi.ganasuno.data.Batch22.httpsFile(raw)?:error("Valid HTTPS URL required")
+        if (Build.VERSION.SDK_INT < 28) error("Android 9+ required")
+        val url=com.abhi.ganasuno.data.Batch22.httpsFile(raw)?:error("Valid HTTPS URL required")
         val tmp=File.createTempFile("art-",".tmp",remote(c));try{
             val http=com.abhi.ganasuno.data.YtApi.http.newBuilder().followRedirects(false).followSslRedirects(false).callTimeout(40,java.util.concurrent.TimeUnit.SECONDS).build()
             http.newCall(Request.Builder().url(url).build()).execute().use{r->check(r.isSuccessful){"Image request failed"};val b=r.body?:error("Empty image");require(b.contentType()?.let{it.type=="image"&&it.subtype in setOf("gif","webp")}==true){"GIF or WebP required"};require(b.contentLength()<=Batch20.MAX_ART_BYTES);var total=0L;b.byteStream().use{input->tmp.outputStream().use{out->val buffer=ByteArray(8192);while(true){val n=input.read(buffer);if(n<0)break;total+=n;require(total<=Batch20.MAX_ART_BYTES);out.write(buffer,0,n)}}};require(com.abhi.ganasuno.data.Batch22.checkedSize(total,b.contentLength(),Batch20.MAX_ART_BYTES))}
@@ -34,7 +35,7 @@ object AnimatedCover {
     @Synchronized fun count(c:Context):Int=directory(c).listFiles().orEmpty().count{it.name.matches(Regex("[a-f0-9]{64}\\.gif"))&&it.isFile}
     @Synchronized fun clearImported(c:Context):Int=directory(c).listFiles().orEmpty().count{it.name.matches(Regex("[a-f0-9]{64}\\.gif"))&&it.isFile&&it.delete()}
     @Synchronized fun save(c:Context,id:String,uri:Uri){
-        require(Build.VERSION.SDK_INT>=28){"Animated image decoding requires Android 9 or newer"}
+        if (Build.VERSION.SDK_INT < 28) error("Animated image decoding requires Android 9 or newer")
         val dir=directory(c); val tmp=File.createTempFile("cover-",".tmp",dir)
         try {
             c.contentResolver.openInputStream(uri)?.use{input->tmp.outputStream().use{out->val buf=ByteArray(8192);var total=0L;while(true){val n=input.read(buf);if(n<0)break;total+=n;require(total<=Batch20.MAX_ART_BYTES){"Image exceeds 8 MB"};out.write(buf,0,n)}}}?:error("Cannot read image")

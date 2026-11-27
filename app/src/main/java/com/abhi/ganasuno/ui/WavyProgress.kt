@@ -4,11 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.widget.SeekBar
+import androidx.appcompat.widget.AppCompatSeekBar
 import kotlin.math.*
 
 /** Native accessible SeekBar with an expressive sine-wave track and ordinary seek gestures. */
-class WavyProgress(context:Context):SeekBar(context) {
+class WavyProgress(context:Context):AppCompatSeekBar(context) {
     private val p=Paint(Paint.ANTI_ALIAS_FLAG)
     private val path=Path()
     init { progressDrawable=android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT);thumb=android.graphics.drawable.GradientDrawable().apply{shape=android.graphics.drawable.GradientDrawable.OVAL;setColor(0xffa78bfa.toInt());setSize(dp(18),dp(18))};thumbOffset=dp(9);minimumHeight=dp(48);contentDescription="Playback position" }

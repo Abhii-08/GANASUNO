@@ -1,15 +1,27 @@
 # Public release checklist — v1.1
 
-- [x] Maintainer approved GPL v3 for original software contributions.
-- [x] Full GPL v3 text and available Apache/MPL/jsoup texts added.
-- [x] User's debug dependency inventory retained and categorized.
-- [x] Pinned GPL license files verified for BravePipeExtractor and HlsDownloader; NanoJSON source header verified.
-- [ ] Review original/modified source against upstream and preserve copyright and modification notices. Confirm rights to all assets, including developer photo (separately owned), bundled fonts, icons and media. Do not assume GPL covers third-party artwork.
-- [ ] Check exact release variant runtime and desugaring artifacts (debug inventory is not sufficient), server and desktop if distributed; collect complete version-specific licenses, NOTICE files, copyright and any special exceptions, including protobuf and Rhino additional notices.
-- [ ] Supply exact Corresponding Source for APK, including required libraries, generated/build scripts and modifications; archive exact source snapshots or ensure equivalent free access and maintain availability under GPLv3 section 6(d). A root LICENSE or moving upstream link alone is not enough.
-- [ ] Ensure notices and license access accompany the APK; verify the in-app legal notice screen. This documentation patch does not alter executable code.
-- [ ] Verify rights/terms for third-party music sources, images and external services; GPL does not grant media distribution rights.
-- [ ] Check source for private credentials and machine-local paths before public push. Never commit signing keys/passwords.
-- [ ] Test signed release and update migration; keep `RELEASE_APPROVED` unset until complete. Do not publish an APK yet.
+- [x] Original contributions carry the maintainer's GPL v3 grant. The root COPYING text is in `LICENSE`.
+- [x] Review sheet covers the 84 entries in the recorded FOSS release runtime and core library desugaring inventory, including `desugar_jdk_libs_configuration_nio`.
+- [x] Matched 84 release and desugaring binary archives to public repository checksums and pinned the local artifact SHA-256 values in [RELEASE-DEPENDENCY-SHA256SUMS.txt](RELEASE-DEPENDENCY-SHA256SUMS.txt).
+- [x] Matched the five downloaded archive hashes to [SOURCE-SHA256SUMS.txt](SOURCE-SHA256SUMS.txt) and checked every ZIP entry's CRC. Archive comments record these revisions.
 
-Official references: https://www.gnu.org/licenses/gpl-3.0.html ; https://www.gnu.org/licenses/gpl-faq.html ; https://www.apache.org/licenses/GPL-compatibility ; https://www.mozilla.org/en-US/MPL/2.0/FAQ/ .
+| Archive | Recorded revision |
+| --- | --- |
+| BravePipeExtractor | `105aad96c7a496c7089f8fe3b1904de7082afc42` |
+| Desugar 2.1.5 | `73170c345e6a762fc6a1f0301bb15218850023ef` |
+| HlsDownloader 1.0.0 | `f79e5e3b8c140db0958aeec6799fe768a5f0a1f1` |
+| NanoJSON | `e9d656ddb49a412a5a0a5d5ef20ca7ef09549996` |
+| Rhino 1.8.1 | `f2d1ffef9dafbd625ca1ea79b8893ecbaee07e61` |
+
+- [x] Staged source candidates for 83 coordinates and recorded the metadata-only Guava marker. The candidate-to-coordinate manifest is in local `build/release-source-review/SOURCE-CANDIDATES.tsv`.
+- [ ] Confirm the archive revisions against the resolved artifact builds, including Rhino and Rhino Engine, the desugaring configuration and any required upstream build inputs. Verify exact notices, copyrights and changes for the entire graph. The inventory scan is bounded and 75 entries lack embedded notices in its output.
+- [ ] Record SimpMusic and other upstream paths and revisions for any copied code. Retain original copyright and identify modifications and dates where GPL §5 applies. The historical notes document API inspiration but do not establish individual file origins.
+- [ ] Record rights evidence for the AI logo, developer photograph and any testing audio or artwork distributed in Git or the APK. Check source image inputs and screenshots as well as the final assets.
+- [ ] Retain GPL texts and notices, Apache 2.0 license and applicable upstream NOTICE contents, MIT and BSD copyright/permission notices, and precise MPL source and notices for covered files. Check each desugaring component's GPLv2 Classpath or assembly exception and included third-party material. Preserve those exceptions with the covered sources and verify their application. [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) · [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) · [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/)
+- [ ] Collect the exact source and build scripts required for the released APK, including dependency sources, patches and required generated inputs. Follow [release setup](../RELEASE_SETUP.md) and verify a build from the extracted archive. Keep source available without charge for as long as the APK is offered under GPLv3 §6(d). Record the mapping from each APK checksum to its commit and source ZIP.
+- [x] Opened bundled notices and GPL text on the API 37 emulator. Verified the exact text is inside all three rebuilt APKs.
+- [ ] Verify completeness against the reviewed upstream notices.
+- [ ] Resolve [service permissions](../SERVICE_COMPLIANCE.md).
+- [ ] Review historical Actions logs and artifacts, triage the redacted dependency archive scan findings before committing source inputs and finish signed device update tests. Obtain explicit approval before enabling `RELEASE_APPROVED`, pushing a release tag or making the repository public.
+
+- [x] Recovered and bundled Rhino 1.8.1's two NOTICE files, OkHttp 4.12.0's Public Suffix List NOTICE, and the shared Apache license from six exact AndroidX source coordinates.

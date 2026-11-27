@@ -176,7 +176,7 @@
                 android:visibility="gone" />
 
             <ImageButton
-                android:id="@+id/miniVideo" android:tint="#FFFFFF" android:visibility="gone"
+                android:id="@+id/miniVideo" app:tint="#FFFFFF" android:visibility="gone"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/glass_touch"
@@ -184,7 +184,7 @@
                 android:src="@drawable/ic_video" />
 
             <ImageButton
-                android:id="@+id/miniPrev" android:tint="#FFFFFF"
+                android:id="@+id/miniPrev" app:tint="#FFFFFF"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/glass_touch"
@@ -192,7 +192,7 @@
                 android:src="@drawable/ic_prev" />
 
             <ImageButton
-                android:id="@+id/miniPlay" android:tint="#FFFFFF"
+                android:id="@+id/miniPlay" app:tint="#FFFFFF"
                 android:layout_marginStart="6dp"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -201,7 +201,7 @@
                 android:src="@drawable/ic_play" />
 
             <ImageButton
-                android:id="@+id/miniNext" android:tint="#FFFFFF"
+                android:id="@+id/miniNext" app:tint="#FFFFFF"
                 android:layout_marginStart="6dp"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

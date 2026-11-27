@@ -1,3 +1,5 @@
+@file:androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+
 package com.abhi.ganasuno
 
 import android.net.Uri
@@ -17,7 +19,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
@@ -36,7 +37,6 @@ import java.util.concurrent.Executors
  * Video player: up to 1080p (video-only + audio merged), with subtitles (CC button) and live streams.
  * Quality limit comes from Settings -> Video quality.
  */
-@OptIn(UnstableApi::class)
 class VideoActivity : AppCompatActivity() {
     private lateinit var b: ActivityVideoBinding
     private var player: ExoPlayer? = null

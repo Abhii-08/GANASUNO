@@ -17,6 +17,8 @@ keystore.properties
 .env
 *.apk
 *.aab
+/Corresponding-Source-v*.zip
+/SHA256SUMS.txt
 
 .env.*
 *.p12

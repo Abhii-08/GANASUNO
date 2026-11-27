@@ -1,3 +1,4 @@
+from release_metadata import assert_release_metadata
 import re, unittest
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -21,6 +22,5 @@ class PrimaryColorFix(unittest.TestCase):
         self.assertIn("if (attrId == 0) return fallback", SOURCE)
         self.assertIn("resolveAttribute(attrId, value, true)", SOURCE)
     def test_version(self):
-        gradle = (ROOT / "app/build.gradle.kts").read_text()
-        self.assertIn('versionName = "45.0"', gradle)
+        assert_release_metadata(self, ROOT)
 if __name__ == "__main__": unittest.main()

@@ -1,3 +1,5 @@
+@file:androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+
 package com.abhi.ganasuno.ui
 
 import android.app.Activity
@@ -8,7 +10,6 @@ import com.abhi.ganasuno.player.TenBandDsp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object TenBandDialog {
-    @OptIn(androidx.media3.common.util.UnstableApi::class)
     fun show(a:Activity) {
         val panel=LinearLayout(a).apply{orientation=LinearLayout.VERTICAL;setPadding(24,12,24,12)}
         fun save(k:String,v:Int){LibraryStore.option(k,v,true);EffectsSettings.refresh()}

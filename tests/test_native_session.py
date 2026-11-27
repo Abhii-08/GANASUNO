@@ -9,8 +9,8 @@ class SessionTests(unittest.TestCase):
         self.assertAlmostEqual(fade_gains(0)[0],1);self.assertAlmostEqual(fade_gains(1)[1],1);self.assertAlmostEqual(sum(x*x for x in fade_gains(.5)),1);self.assertEqual(fade_gains(float('nan')),(1.,0.))
     def test_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root=Path(tmp);a=root/'a.wav';b=root/'b.wav';a.touch();b.touch();q=Queue();q.add([a,b,a]);q.set_album(1,'Second');q.select(1);q.save(root/'saved.json');r=Queue();r.restore(root/'saved.json');self.assertEqual(r.files,[a,b]);self.assertEqual(r.index,1);self.assertEqual(r.album(1),'Second');a.unlink();r.restore(root/'saved.json');self.assertEqual(r.files,[b]);self.assertEqual(r.index,0)
+            root=Path(tmp).resolve();a=root/'a.wav';b=root/'b.wav';a.touch();b.touch();q=Queue();q.add([a,b,a]);q.set_album(1,'Second');q.select(1);q.save(root/'saved.json');r=Queue();r.restore(root/'saved.json');self.assertEqual(r.files,[a,b]);self.assertEqual(r.index,1);self.assertEqual(r.album(1),'Second');a.unlink();r.restore(root/'saved.json');self.assertEqual(r.files,[b]);self.assertEqual(r.index,0)
     def test_invalid_session(self):
         with tempfile.TemporaryDirectory() as tmp:
-            p=Path(tmp)/'saved.json';p.write_text('{}');q=Queue();self.assertRaises(ValueError,q.restore,p)
+            p=Path(tmp).resolve()/'saved.json';p.write_text('{}');q=Queue();self.assertRaises(ValueError,q.restore,p)
 if __name__=='__main__': unittest.main()

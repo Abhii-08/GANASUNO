@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-java@v4
         with:
@@ -23,11 +25,12 @@ jobs:
       - name: Build Release APK
         run: |
           chmod +x gradlew
-          ./gradlew :app:assembleFossRelease --stacktrace
+          ./gradlew :app:assembleFossRelease :app:verifyReleaseDependencies --stacktrace
 
       - name: Sign and Verify APK
         shell: bash
         env:
+          RELEASE_CERT_SHA256: ${{ vars.RELEASE_CERT_SHA256 }}
           SIGNING_KEYSTORE_B64: ${{ secrets.SIGNING_KEYSTORE_B64 }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
@@ -51,7 +54,19 @@ jobs:
             --key-pass env:SIGNING_KEY_PASSWORD \
             --out GANASUNO.apk aligned.apk
 
-          "$TOOLS/apksigner" verify --verbose --print-certs GANASUNO.apk
+          cert=$("$TOOLS/apksigner" verify --verbose --print-certs GANASUNO.apk)
+          actual=$(sed -n 's/^Signer #[0-9]* certificate SHA-256 digest: //p' <<< "$cert")
+          [[ "$actual" =~ ^[a-f0-9]{64}$ ]]
+          expected=${RELEASE_CERT_SHA256,,}
+          expected=${expected//:/}
+          if [[ -n "$expected" ]]; then
+            [[ "$actual" == "$expected" ]]
+          fi
+          version=$(sed -n 's/^[[:space:]]*versionName = "\([0-9.]*\)".*/\1/p' app/build.gradle.kts)
+          code=$(sed -n 's/^[[:space:]]*versionCode = \([0-9]*\).*/\1/p' app/build.gradle.kts)
+          badging=$("$TOOLS/aapt" dump badging GANASUNO.apk)
+          grep -F "package: name='com.abhi.ganasuno' versionCode='$code' versionName='$version'" <<< "$badging"
+          printf 'Public signer SHA-256: %s\n' "$actual"
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:

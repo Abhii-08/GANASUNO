@@ -1,3 +1,4 @@
+from release_metadata import assert_release_metadata
 from pathlib import Path
 import unittest, re, xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
@@ -27,6 +28,5 @@ class GlassHeaderSearch(unittest.TestCase):
   for n in ['video','radio']:
    self.assertEqual(ET.parse(ROOT/f'app/src/main/res/drawable/glass_feature_{n}.xml').getroot().tag,'vector')
  def test_version(self):
-  s=(ROOT/'app/build.gradle.kts').read_text()
-  self.assertIn('versionCode = 111',s);self.assertIn('versionName = "45.0"',s)
+  assert_release_metadata(self, ROOT)
 if __name__=='__main__': unittest.main()

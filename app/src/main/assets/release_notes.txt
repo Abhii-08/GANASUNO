@@ -1,3 +1,8 @@
+GANASUNO 1.1
+
+Stable update checks use GitHub Releases. Automatic checks are optional. Android prompts before installing an update. Release notes and corresponding source will accompany the public APK.
+
+Development history
 GANASUNO 30.0 — UI integration
 Home, Search, Library, Player and Settings navigation. 70 grouped searchable settings routes, song actions, artwork swipe. APK/device testing pending. See docs/V30_UI_ROUTE_AUDIT.csv for routes and limitations.
 
