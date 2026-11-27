@@ -1,0 +1,9 @@
+GANASUNO setup and troubleshooting
+
+Open the existing folder containing settings.gradle.kts in Android Studio. Use Gradle JDK 17, install Android SDK API 36, sync and run on Android 8 or newer. Choose fossDebug or fullDebug in Build Variants. Build in PowerShell: .\gradlew.bat assembleFossDebug.
+
+If sync fails, open Build Output and inspect the first error. Check internet access, Gradle JDK and installed SDK. If playback fails, verify the source is available and check Settings > More features > Developer diagnostics. Use local audio for a baseline test.
+
+For Listen Together, configure your own trusted HTTPS server using server/README.md. Room comments are shared only with approved members and are erased when the room expires or the process restarts. Never post private information.
+
+Public catalogue and AI features require the user's own API keys; no provider access is bundled. Use the official service for online catalogue results. External API availability and actual Android device playback have not been verified here.

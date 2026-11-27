@@ -1,0 +1,8 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#20232C" android:padding="16dp">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="GANASUNO" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" />
+    <TextView android:id="@+id/widget_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#DDE1EE" android:textSize="14sp" />
+    <TextView android:id="@+id/widget_names" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="#DDE1EE" android:maxLines="2" android:ellipsize="end" />
+    <TextView android:id="@+id/widget_playlist1" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:padding="6dp" android:textColor="#FFFFFF" android:singleLine="true" android:ellipsize="end" />
+    <TextView android:id="@+id/widget_playlist2" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:padding="6dp" android:textColor="#FFFFFF" android:singleLine="true" android:ellipsize="end" />
+    <TextView android:id="@+id/widget_playlist3" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:padding="6dp" android:textColor="#FFFFFF" android:singleLine="true" android:ellipsize="end" />
+</LinearLayout>

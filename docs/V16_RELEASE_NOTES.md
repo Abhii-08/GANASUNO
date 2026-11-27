@@ -1,0 +1,21 @@
+# GANASUNO 16.0 — Next partial-feature batch
+
+Base: GANASUNO 15.0. Ten existing partial catalogue entries upgraded (#58, #60, #85, #86, #91, #95, #97, #99, #112, #187). Three promoted to source implementation: #86 (regional public popular music videos), #112 (offline public playlist metadata snapshots), #187 (scheduled release checks). Seven remain partial. Matrix: 109 implemented in source, 41 partial, 50 missing; original 90-partial completion target: 49 promoted, 41 remaining. No new previously missing entry counted. The matrix is carried forward and is not a runtime audit of all earlier features.
+
+## Public catalogue
+Open Settings > More features (v5–16) > Batch 7 · Public catalogue. Provide your own restricted YouTube Data API v3 key; enable the API in your Google Cloud project and restrict the key to that API. API access and quota are subject to Google's service rules. The app keeps the key in the activity instance only, sends it only to the official Google API endpoint, does not put it in a URL, and has a Forget API key control. No keys bundled. Public metadata is separate from the existing unofficial playback engine; open results using the official YouTube website/app via a chooser. No downloads, subscription bypass, account access or audio data from the Data API. Search, country and public video IDs are sent to Google when requested. Quota can run out, and chart data may not be available in every region.
+
+- Search music videos, artist channels, or public playlists. Browse channel descriptions, statistics and public music uploads. Recent uploads are not necessarily new music releases. Popular music videos use the API's music category and selected region; not a YouTube Music editorial chart.
+- Select song actions > Public video metadata or Public alternative versions. Missing dislikes stay unavailable; title matches are only candidates. Existing stream format remains separate.
+- Open public playlist URL/ID, fetch tracks and optionally save metadata. Cache limited to 20 snapshots, 200 entries per snapshot, 7-day freshness; stale entries removed on app startup or access. Clear cached metadata in the catalogue menu. No private playlists, account sync, cached audio or full album catalogue. Bookmarks persist independently. Pagination stops after five pages, duplicate IDs are removed, and repeated page tokens stop further requests. A provider can return fewer items than requested.
+- Catalogue result limit uses `maxResults` and remaining capacity for the official path. The older unofficial home path still lacks an upstream row limit.
+
+API reference: https://developers.google.com/youtube/v3/docs/search/list ; https://developers.google.com/youtube/v3/docs/videos/list ; https://developers.google.com/youtube/v3/docs/playlistItems/list ; https://developers.google.com/youtube/v3/docs/channels/list .
+
+## Automatic updates
+Advanced tools > Update checks: configure your trusted HTTPS release manifest and stable/nightly channel; enable automatic checks. A network-constrained daily persisted job checks metadata when Android allows. A saved result appears on the next app launch; foreground check remains a fallback and manual check is available. No publisher endpoint bundled, no background activity launches or auto-installation. The example manifest contains placeholder URLs only.
+
+## Tests / limits
+- 42 compiled standalone Kotlin core assertions covering ID validation, URL generation, input validation, date range, cache freshness, scheduling intervals, metadata availability, alternate candidates, pagination and deduplication.
+- 70 Android Kotlin source files parsed by Kotlin PSI (syntax only), 31 XML files parsed, 19 existing Python backend tests passed; all desktop JavaScript files passed node syntax checks.
+- No Android SDK or Android Gradle build available in this environment. Actual compilation of Android-dependent modules, emulator execution, JobScheduler behavior, external API authorization, API response parsing against live fixtures, and playback remain unverified. No live API key supplied. Previous ZIP unchanged. Before release run `gradlew.bat assembleDebug --stacktrace` and test the public catalogue, offline snapshots and background update checks on a physical Android device or emulator.

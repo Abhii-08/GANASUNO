@@ -1,0 +1,4 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="library" android:enabled="true" android:icon="@mipmap/ic_launcher" android:shortcutShortLabel="@string/shortcut_library"><intent android:action="com.abhi.ganasuno.LIBRARY" android:targetPackage="com.abhi.ganasuno" android:targetClass="com.abhi.ganasuno.MainActivity" /></shortcut>
+    <shortcut android:shortcutId="history" android:enabled="true" android:icon="@mipmap/ic_launcher" android:shortcutShortLabel="@string/shortcut_history"><intent android:action="com.abhi.ganasuno.HISTORY" android:targetPackage="com.abhi.ganasuno" android:targetClass="com.abhi.ganasuno.MainActivity" /></shortcut>
+</shortcuts>

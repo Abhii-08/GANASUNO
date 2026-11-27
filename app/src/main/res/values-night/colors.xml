@@ -1,0 +1,9 @@
+<resources>
+    <color name="brand_primary">#8E8E93</color>
+    <color name="brand_on_primary">#161616</color>
+    <color name="brand_secondary">#FFA75A</color>
+    <color name="placeholder_bg">#2A2F3A</color>
+    <color name="placeholder_fg">#7C8599</color>
+    <color name="browse_field">#252525</color>
+    <color name="browse_surface">#000000</color>
+</resources>

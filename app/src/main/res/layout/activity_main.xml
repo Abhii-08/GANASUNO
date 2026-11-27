@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+    <LinearLayout android:id="@+id/glassContent" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="18dp" android:paddingBottom="14dp" android:gravity="center_vertical" android:orientation="horizontal">
+        <LinearLayout android:id="@+id/headerFlipCard" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/sectionTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Home" android:textSize="32sp" android:letterSpacing="-0.035" android:textColor="?attr/colorOnSurface" android:textStyle="bold" android:maxLines="2" android:ellipsize="end" />
+            <TextView android:id="@+id/sectionSubtitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Your music, your way" android:textSize="14sp" android:textAppearance="?attr/textAppearanceBodySmall" android:textColor="?attr/colorOnSurfaceVariant" android:paddingTop="4dp" />
+        </LinearLayout>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnSectionMore" style="@style/Widget.Material3.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="More" />
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/glass_settings_field"
+            android:padding="9dp"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/ic_settings_menu" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/searchBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginHorizontal="20dp" android:layout_marginBottom="12dp" android:background="@drawable/search_field" android:paddingHorizontal="4dp" android:visibility="gone">
+        <ImageButton android:id="@+id/btnSearchGo" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/glass_search" android:background="@drawable/glass_touch" android:contentDescription="Search music" android:padding="12dp" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="48dp" android:paddingVertical="10dp" android:paddingStart="0dp" android:paddingEnd="12dp" android:background="@android:color/transparent" android:textColor="?attr/colorOnSurface" android:textColorHint="?attr/colorOnSurfaceVariant" android:textSize="14sp" android:hint="Artists, Albums, Playlists, and More" android:imeOptions="actionSearch" android:inputType="text" android:maxLines="1" android:singleLine="true" />
+        <ImageButton android:id="@+id/btnSearchClear" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_close" android:background="@drawable/glass_touch" android:contentDescription="Clear search" android:visibility="gone" />
+    </LinearLayout>
+    <HorizontalScrollView android:id="@+id/suggestScroll" android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none" android:visibility="gone">
+        <LinearLayout android:id="@+id/suggestRow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingHorizontal="20dp" />
+    </HorizontalScrollView>
+    <HorizontalScrollView
+        android:id="@+id/chipScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            app:singleLine="true" />
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlayAll"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:text="@string/play_all" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShuffle"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:text="@string/smart_shuffle" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <ScrollView android:id="@+id/toolsScroll" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:clipToPadding="false" android:visibility="gone">
+            <LinearLayout android:id="@+id/toolsContent" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="16dp" />
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="24dp"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    </LinearLayout>
+    <LinearLayout android:id="@+id/playerDock" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom|center_horizontal" android:orientation="vertical" android:paddingHorizontal="16dp" android:paddingBottom="12dp" android:clipChildren="false" android:clipToPadding="false">
+    <com.abhi.ganasuno.ui.LiquidGlassSurface
+        android:id="@+id/mini"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="9dp"
+        android:elevation="5dp"
+        android:paddingHorizontal="6dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <SeekBar
+            android:id="@+id/seek"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:max="100"
+            android:layout_marginHorizontal="8dp"
+            android:progressTint="#FFFFFF" android:thumbTint="#FFFFFF" android:progressBackgroundTint="#55FFFFFF" android:contentDescription="Playback position" android:paddingTop="0dp" android:paddingBottom="0dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="6dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:id="@+id/miniThumb" android:background="@drawable/artwork_round" android:clipToOutline="true"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/miniTitle" android:textColor="#FFFFFF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee" android:marqueeRepeatLimit="marquee_forever" android:singleLine="true"
+                    android:maxLines="1"
+                    android:textAppearance="?attr/textAppearanceTitleSmall" />
+
+                <TextView
+                    android:id="@+id/miniArtist" android:textColor="#C4C4C4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="?attr/textAppearanceBodySmall" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/miniBuffering"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:indeterminateTint="#8E8E93"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/miniVideo" android:tint="#FFFFFF" android:visibility="gone"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/glass_touch"
+                android:contentDescription="@string/video"
+                android:src="@drawable/ic_video" />
+
+            <ImageButton
+                android:id="@+id/miniPrev" android:tint="#FFFFFF"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/glass_touch"
+                android:contentDescription="@string/previous"
+                android:src="@drawable/ic_prev" />
+
+            <ImageButton
+                android:id="@+id/miniPlay" android:tint="#FFFFFF"
+                android:layout_marginStart="6dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/glass_touch"
+                android:contentDescription="@string/play_pause"
+                android:src="@drawable/ic_play" />
+
+            <ImageButton
+                android:id="@+id/miniNext" android:tint="#FFFFFF"
+                android:layout_marginStart="6dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/glass_touch"
+                android:contentDescription="@string/next"
+                android:src="@drawable/ic_next" />
+        </LinearLayout>
+    </com.abhi.ganasuno.ui.LiquidGlassSurface>
+    <com.abhi.ganasuno.ui.LiquidGlassSurface android:id="@+id/bottomNav" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:paddingHorizontal="6dp" android:paddingVertical="6dp" android:elevation="5dp">
+        <TextView android:id="@+id/navHome" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="56dp" android:gravity="center" android:text="Listen Now" android:textSize="11sp" android:drawableTop="@drawable/nav_listen" android:drawableTint="#A0A0A0" android:textColor="#A0A0A0" android:drawablePadding="2dp" android:paddingTop="5dp" android:paddingBottom="5dp" android:background="@drawable/glass_touch" android:clickable="true" android:focusable="true" android:contentDescription="Listen Now" />
+        <TextView android:id="@+id/navSearch" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="56dp" android:gravity="center" android:text="Search" android:textSize="11sp" android:drawableTop="@drawable/glass_search" android:drawableTint="#A0A0A0" android:textColor="#A0A0A0" android:drawablePadding="2dp" android:paddingTop="5dp" android:paddingBottom="5dp" android:background="@drawable/glass_touch" android:clickable="true" android:focusable="true" android:contentDescription="Search" />
+        <TextView android:id="@+id/navLibrary" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="56dp" android:gravity="center" android:text="Library" android:textSize="11sp" android:drawableTop="@drawable/nav_library" android:drawableTint="#A0A0A0" android:textColor="#A0A0A0" android:drawablePadding="2dp" android:paddingTop="5dp" android:paddingBottom="5dp" android:background="@drawable/glass_touch" android:clickable="true" android:focusable="true" android:contentDescription="Library" />
+        <TextView android:id="@+id/navPlayer" android:visibility="gone" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="56dp" android:gravity="center" android:text="Player" android:textSize="11sp" android:drawableTop="@drawable/ic_play" android:drawableTint="#A0A0A0" android:textColor="#A0A0A0" android:drawablePadding="2dp" android:paddingTop="5dp" android:paddingBottom="5dp" android:background="@drawable/glass_touch" android:clickable="true" android:focusable="true" android:contentDescription="Player" />
+        <TextView android:id="@+id/navSettings" android:visibility="gone" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="56dp" android:gravity="center" android:text="Settings" android:textSize="11sp" android:drawableTop="@drawable/ic_settings" android:drawableTint="#A0A0A0" android:textColor="#A0A0A0" android:drawablePadding="2dp" android:paddingTop="5dp" android:paddingBottom="5dp" android:background="@drawable/glass_touch" android:clickable="true" android:focusable="true" android:contentDescription="Settings" />
+    </com.abhi.ganasuno.ui.LiquidGlassSurface>
+    </LinearLayout>
+</FrameLayout>

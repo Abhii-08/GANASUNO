@@ -1,0 +1,9 @@
+# GANASUNO 7.0 — listening rooms and library upgrade
+Continuation of v6, same package and SDK/JDK requirements. No original ZIP overwritten.
+
+- Settings → Listen Together (self-hosted): foreground-only room UI, explicit guest follow and host broadcast, manual publish, approval, auto-approval, member removal, host transfer, guest suggestions. See server/README.md for Python server deployment. HTTPS certificate and trusted hosting are required; no external server supplied. Sync is approximate, no persistent rejoin block or Metrolist compatibility. No audio or account credentials transmitted by room server.
+- Home-screen widgets → GANASUNO Listening Insights: a dedicated seven-day summary of minutes, distinct songs and top artist, opens history; update timing controlled by Android host.
+- Library → Playlists → select a playlist → Playlist details: track/artist/local file totals, first 50 track details, share or open. No online album detail.
+- Desktop companion: saved playlist sidebar stores local audio files through IndexedDB (200 MB per playlist, browser quota/origin restrictions apply); save, reopen, delete. Still browser-based, not native desktop. No cross-device sync.
+
+Verification: 11 Python unit/integration tests pass (including HTTP create, permissions, approve, publish/position, pause, stale state, transfer, kick, suggestions, auto-approval, expiry); 45 Kotlin source files parsed without syntax errors; 26 XML files well-formed; three desktop JavaScript files pass Node syntax check. No Android SDK/type-check/build or device testing available; desktop IndexedDB runtime and Android-to-server integration untested. The 200-item CSV explicitly distinguishes partial/source-only features. Previous historical tests are not new verification. No API credentials or private data bundled. Original source licensing remains unverified.

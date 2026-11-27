@@ -1,0 +1,25 @@
+# V33 Liquid Glass source implementation
+
+## Changes
+- `app/src/main/res/layout/activity_main.xml`: FrameLayout overlay, separate underlying content layer, two floating capsules, 16 dp horizontal padding, 8 dp gap, adaptive wrap-content tabs, mini-player artwork/metadata/progress and neutral controls. The original IDs and MediaController callbacks are retained. Dock width is capped at 640 dp on wide screens. Previous button is hidden on screens under 380 dp; horizontal artwork swipe and full player still offer previous-track access. The dock is temporarily hidden while the IME is open.
+- `ui/LiquidGlassSurface.kt` (new): rounded clipped glass drawing, actual sibling-content sampling, adaptive contrast tint, artwork tint, gradient edge reflections, spring-shaped selection motion, capture scheduling, lifecycle cleanup, content bottom padding. Dark selected #C4C4C4, inactive #A0A0A0; light mode uses dark neutral foregrounds. Reflection layers are artistic approximations rather than physical refraction. Settings deselects the three-tab indicator.
+- `ui/GlassHardwareBlur.kt` (new): Android 12+ RenderNode/RenderEffect blurs the sampled content layer only, not foreground controls. A bounded downsampled software bitmap blur works on API 26–30 and when hardware setup fails. Sampling is capped at 128×48 per surface and coalesced at 125 ms; it refreshes on layout/scroll events. Unsupported software-drawn content can fall back to tint.
+- `ui/GlassMath.kt` (new): damped spring interpolation and separable two-pass box blur (two iterations).
+- `MainActivity.kt`: existing navigation and playback callbacks reused; mini-player swipe/tap and real metadata retained. Artwork-derived colors update on thumbnail load, icon-scale feedback, neutral full-player button/seek tints, basic overview-tab scroll restoration, system/IME/cutout insets, compact width, reduced-effects setting. Playback/background service not rewritten.
+- `res/drawable/glass_search.xml`, `glass_touch.xml` (new); `nav_listen.xml`, `nav_library.xml` (updated): consistent vector sizes and neutral touch feedback.
+- `app/build.gradle.kts`: version 33.0 / versionCode 37; no new dependencies.
+- `tests/V33GlassTest.kt`, `tests/test_v33_glass.py` (new); updated historical layout/navigation/version contracts and smoke script for visible three-tab navigation. Historical feature report unchanged; this is a UI release.
+
+## Actual tests in this environment
+- 43 Python project checks passed (static wiring, XML/local resource references and existing desktop tests).
+- 38 Python backend tests passed.
+- 10 standalone Kotlin glass-math assertions passed, compiled with kotlinc and executed on JVM.
+- 109 Android Kotlin files parsed using Kotlin compiler PSI: zero syntax errors. This is NOT type resolution or APK compilation.
+- 44 Android XML files parsed; local resource references checked. This is NOT AAPT2 linking.
+- Gradle `:app:assembleFossDebug --no-daemon` failed before build configuration: `java.net.UnknownHostException: services.gradle.org` while downloading gradle-8.13-bin.zip. No Android SDK or emulator was available. No APK produced.
+
+## Limitations and device acceptance checklist (not run)
+1. Install via Android Studio; verify both variants compile and resource linking succeeds. Test Android 8/11 software path, Android 12+ hardware path, reduced-effects fallback. Check dark and light mode, large fonts, TalkBack, gesture and 3-button navigation, tablet/foldable/landscape.
+2. Tap all 3 tabs, profile/settings and existing full-player controls; check capsule movement, exact dark navigation colors, no red selected state, scroll clearance at bottom, keyboard behavior, artwork changes, playback/seek/next/previous and background playback. Confirm no playback restart or data loss. Check actual media notification and lock-screen controls.
+3. Sampled blur is event-driven and deliberately lower-resolution, not a continuous compositor. On hardware-only content, a tint fallback may be used. Real optical distortion/AGSL refraction and physical caustics are not implemented. Spring-shaped timing is an approximation; icon selection colors switch immediately. Play/pause scaling is not a vector morph. Album image fades are simple alpha transitions, not shared-element transitions. Fullscreen expansion/collapse retains existing tap/swipe behavior, not a new shared-element transition. Basic overview scroll positions are restored; full per-tab search results/back stacks are not retained. Skeleton loaders and 60 FPS guarantees are not implemented. Progress control is thin; full player provides an alternative seek target. Existing settings and feature counts retained, but their runtime behavior has not been verified.
+4. Run `python tools/android_ui_smoke.py --adb path/to/adb` with an unlocked emulator (not executed here); manual playback and rendering checks are separate. Profile/settings → Liquid Glass effects → Reduced effects disables backdrop sampling and spring animation, leaving functional neutral glass surfaces.

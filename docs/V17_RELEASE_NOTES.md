@@ -1,0 +1,11 @@
+# GANASUNO 17.0 — partial-feature batch
+Base: unchanged GANASUNO 16.0. Eleven previously partial items received source changes: #11, #30, #48, #50, #60, #89, #96, #119, #122, #194, #199. Two promoted to implemented in source (#30 seed-based radio, #50 artwork Up Next). Nine remain partial; no missing feature reclassified. Matrix: 111 implemented in source, 39 partial, 50 missing. These are carried-forward source classifications, not a comprehensive runtime audit.
+
+- Song actions > Start artist mix now starts a queue from the chosen seed, based on saved tracks, related artists, and optional existing online search. Playback controls > Endless artist mix ranks candidates and prevents duplicate IDs; online tracks only, cap 500.
+- Up Next artwork queue follows Media3's actual shuffle order and repeat-all traversal. Can move a track to play next with shuffle disabled. Repeat-one does not hide the later tracks. Reorder uses underlying queue positions.
+- Listen Together > Shared timestamp comments/reactions: approved members only, room-specific and temporary, view latest 30 per track, seek and delete as author or host. No shared waveform rendering yet. Use the updated trusted HTTPS server; old servers lack these routes.
+- Public alternative versions use stricter title matching. Theme-based public playlists are searchable using the user's own official Data API key; not editorial picks. Saved YouTube playlist and RSS podcast bookmarks can be opened inside the app.
+- Desktop sidebar browses saved local tagged playlists, albums, artists and podcasts. No native desktop build or automatic tagging. In-app bundled setup guide and dependency notices are accessible under support links; license verification and hosted developer blog remain incomplete.
+
+## Verification
+22 compiled standalone Kotlin assertions (queue traversal, version matching, similarity and radio ranking), 6 standalone Node grouping assertions, 25 Python backend tests (including 6 new comment tests), Kotlin PSI syntax checks and XML parsing. Desktop JS syntax checked. No Android SDK/Gradle APK build, Android runtime, live API, or browser playback/IndexedDB verification available here. Do not treat source status as runtime certification. Original ZIP unchanged. Android Studio: use JDK 17, API 36, sync and build `gradlew.bat assembleDebug --stacktrace`.

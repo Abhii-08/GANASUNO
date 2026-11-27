@@ -1,0 +1,16 @@
+GANASUNO development journal · v20
+
+Community lyrics ratings
+Rate an exact saved lyric version on a trusted self-hosted HTTPS server. Each installation has a random server-specific token; lyrics text is not uploaded. Votes can be withdrawn.
+
+Animated artwork
+Choose an animated GIF you own for the current track. On Android 9+ it loops while playing; Android 8 retains static covers.
+
+Home discovery and buffering
+Select Official public catalogue in Discovery settings for a bounded metadata feed. A session-only Data API key is needed. The optional next-track buffer uses at most 512 KiB per attempt, when transient media cache and unmetered network are available.
+
+Crash recovery and privacy
+The last local crash summary is shown on next launch. Full edition can send a reviewed report to a user-configured Sentry DSN. Privacy edition does not upload crash reports.
+
+Support
+Open the in-app troubleshooting guide or configure your own project support URL. This source distribution has no verified public GANASUNO support site. Android compilation and runtime testing remain pending.

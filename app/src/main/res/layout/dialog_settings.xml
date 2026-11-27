@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            style="@style/SettingsHeader"
+            android:text="@string/audio_quality" />
+
+        <RadioGroup
+            android:id="@+id/groupQuality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/qLow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/quality_low" />
+
+            <RadioButton
+                android:id="@+id/qNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/quality_normal" />
+
+            <RadioButton
+                android:id="@+id/qHigh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/quality_high" />
+        <RadioButton android:id="@+id/q320" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Prefer 320 kbps (if available)" />
+        </RadioGroup>
+
+        <TextView
+            style="@style/SettingsHeader"
+            android:text="@string/audio_language" />
+
+        <RadioGroup
+            android:id="@+id/groupLang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/lOriginal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lang_original" />
+
+            <RadioButton
+                android:id="@+id/lHindi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lang_hindi" />
+
+            <RadioButton
+                android:id="@+id/lEnglish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lang_english" />
+
+            <RadioButton
+                android:id="@+id/lPunjabi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lang_punjabi" />
+        </RadioGroup>
+
+        <TextView
+            style="@style/SettingsHeader"
+            android:text="@string/video_quality" />
+
+        <RadioGroup
+            android:id="@+id/groupVideo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/v360"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="360p" />
+
+            <RadioButton
+                android:id="@+id/v480"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="480p" />
+
+            <RadioButton
+                android:id="@+id/v720"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="720p" />
+
+            <RadioButton
+                android:id="@+id/v1080"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1080p" />
+        </RadioGroup>
+
+        <TextView
+            style="@style/SettingsHeader"
+            android:text="@string/sound" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switchSilence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/skip_silence" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switchNormalize"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/normalize_volume" />
+
+        <TextView
+            android:id="@+id/sleepHeader"
+            style="@style/SettingsHeader"
+            android:text="@string/sleep_timer" />
+
+        <TextView
+            android:id="@+id/sleepStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSleep"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/set_sleep_timer" />
+    </LinearLayout>
+</ScrollView>

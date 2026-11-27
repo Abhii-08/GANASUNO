@@ -1,0 +1,201 @@
+﻿ID,Requested feature,V29 source status (unchanged),V30 source route,Verification
+1,YouTube / YouTube Music se bina ads ke free streaming,Partial,Search → Live stations / search music (provider limitations),Route inventory only; device acceptance pending
+2,Background playback,Existing source,"Automatic playback service, notification and queue restoration",Route inventory only; device acceptance pending
+3,YouTube Music Premium users ke liye 256kbps tak Opus/AAC stream,Not implemented,Not implemented; no new route,Not implemented
+4,"""Prefer 320kbps"" option, apna custom 320kbps URL bhi de sakte ho",Added source,Settings → Playback → 320 kbps preference,Route inventory only; device acceptance pending
+5,Audio quality selector,Existing source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+6,"1080p video playback, subtitles ke saath",Existing source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+7,Video quality selector,Existing source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+8,Video tracks ko audio-only ki jagah video mein play karna,Added source,Settings → Playback → Video playback mode,Route inventory only; device acceptance pending
+9,Radio mein music video ki jagah audio version play karna,Not implemented,Not implemented; no new route,Not implemented
+10,YouTube Music live stations,Partial,Search → Live stations / search music (provider limitations),Route inventory only; device acceptance pending
+11,Endless queue (queue khatam hone par similar songs apne aap add),Added source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+12,Shuffle,Existing source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+13,Repeat One / Repeat All / Repeat Off,Added source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+14,Shuffle aur repeat mode save rehta hai,Added source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+15,Last played track aur queue save/restore,Existing source,"Automatic playback service, notification and queue restoration",Route inventory only; device acceptance pending
+16,Skip silence,Existing source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+17,Playback speed control,Added source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+18,Pitch control,Added source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+19,Sleep timer (minutes ya end of song),Existing source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+20,Crossfade (custom duration),Added source,Settings → Playback → Crossfade & DJ transitions,Route inventory only; device acceptance pending
+21,Auto crossfade / AutoMix (BPM aur loudness se intro aur last chorus detect karta hai),Not implemented,Not implemented; no new route,Not implemented
+22,DJ-style transition (low-pass/high-pass filter sweeps),Added source,Settings → Playback → Crossfade & DJ transitions,Route inventory only; device acceptance pending
+23,"""Keep albums continuous"" (same album ke tracks ke beech crossfade nahi)",Added source,Settings → Playback → Crossfade & DJ transitions,Route inventory only; device acceptance pending
+24,Fade audio effect (ms mein duration),Added source,Settings → Playback → Manual fade,Route inventory only; device acceptance pending
+25,Normalize volume / loudness balance,Added source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+26,Multi-audio-track videos ke liye preferred audio language,Existing source,Settings → Playback → Audio & video quality; video via song actions,Route inventory only; device acceptance pending
+27,Explicit content skip ya play karne ka toggle,Added source,Settings → Playback → Explicit content,Route inventory only; device acceptance pending
+28,"Play next aur ""Move to play next""",Added source,Song ⋮ → Play next / Add to queue; Player → Queue,Route inventory only; device acceptance pending
+29,"Add to queue, queue mein move up/down/delete",Added source,Song ⋮ → Play next / Add to queue; Player → Queue,Route inventory only; device acceptance pending
+30,Kisi bhi song se Radio/Mix start karna,Implemented,Song ⋮ → Start artist mix,Route inventory only; device acceptance pending
+31,10-band equalizer,Added source,Settings → Sound → 10-band software EQ,Route inventory only; device acceptance pending
+32,EQ presets aur custom curve,Added source,Settings → Sound → 10-band software EQ,Route inventory only; device acceptance pending
+33,Preamp control,Added source,Settings → Sound → 10-band software EQ,Route inventory only; device acceptance pending
+34,AutoEq headphone profiles (headphone model search karke),Added source,Settings → Sound → 10-band software EQ,Route inventory only; device acceptance pending
+35,Android ka system equalizer use karne ka option,Added source,Settings → Sound → System equalizer,Route inventory only; device acceptance pending
+36,"Delay effect (Slapback, Quarter, Dub presets, time/feedback/mix)",Added source,Settings → Sound → Stereo rotation & delay,Route inventory only; device acceptance pending
+37,"Reverb effect (Room, Hall, Plate, Cathedral)",Added source,Settings → Sound → Reverb and preamp,Route inventory only; device acceptance pending
+38,8D audio (Android aur Desktop),Partial,Settings → Sound → Stereo rotation & delay,Route inventory only; device acceptance pending
+39,8D ki direction aur rotation time (3–30 sec),Added source,Settings → Sound → Stereo rotation & delay,Route inventory only; device acceptance pending
+40,"Audio output picker (speaker, wired, Bluetooth, USB, HDMI, Cast), baaki apps ki audio ko chhue bina",Partial,Settings → Playback → Audio output,Route inventory only; device acceptance pending
+41,Google Cast support,Not implemented,Not implemented; no new route,Not implemented
+42,"""Kill service on exit"" option",Added source,Settings → System & privacy → Stop service on exit,Route inventory only; device acceptance pending
+43,Chaar Now Playing styles,Added source,Settings → Player & appearance → Player style; Player tab,Route inventory only; device acceptance pending
+44,Classic style,Added source,Settings → Player & appearance → Player style; Player tab,Route inventory only; device acceptance pending
+45,"Material 3 Expressive style, wavy seek bar ke saath",Added source,Settings → Player & appearance → Player style; Player tab,Route inventory only; device acceptance pending
+46,Naya Apple Music-style player,Added source,Settings → Player & appearance → Player style; Player tab,Route inventory only; device acceptance pending
+47,SoundCloud-style player (waveform hi seek bar hai),Added source,Settings → Player & appearance → Player style; Player tab,Route inventory only; device acceptance pending
+48,"SoundCloud style mein timestamp wale comments waveform par, quick reactions ke saath",Added source,Settings → Sound → Track waveform and music tags; private rooms for shared comments,Route inventory only; device acceptance pending
+49,Apple Music-style mesh gradient backdrop,Added source,Settings → Player & appearance → Player style; Player tab,Route inventory only; device acceptance pending
+50,Apple Music-style queue view,Implemented,Player → Queue / Settings → Artwork queue,Route inventory only; device acceptance pending
+51,Fullscreen player (Android aur Desktop),Added source,Player tab / mini-player gestures / artwork swipe,Route inventory only; device acceptance pending
+52,"Mini-player, swipe karke skip/close",Added source,Player tab / mini-player gestures / artwork swipe,Route inventory only; device acceptance pending
+53,Spotify Canvas support,Not implemented,Not implemented; no new route,Not implemented
+54,Animated album artwork (bina account ke),Partial,Settings → Player & appearance → Animated artwork / Download animated artwork,Route inventory only; device acceptance pending
+55,Artwork swipe karke song badalna,Added source,Player tab / mini-player gestures / artwork swipe,Route inventory only; device acceptance pending
+56,Picture-in-Picture support,Added source,Song ⋮ → Play video; Android PiP,Route inventory only; device acceptance pending
+57,"Song ki BPM, Key aur Scale",Partial,Settings → Sound → Track waveform and music tags; private rooms for shared comments,Route inventory only; device acceptance pending
+58,"Song info (codec, bitrate, itag, mime type, plays, likes/dislikes, publish date)",Partial,Settings → System & privacy → Combined song information / Current playback format,Route inventory only; device acceptance pending
+59,"YouTube comments padhna, aur login hone par post/reply/like",Partial,Settings → Integrations → Community & charts,Route inventory only; device acceptance pending
+60,"""Other version"" (song ka doosra version)",Added source,Song ⋮ → Other versions / Settings → Discovery → Alternative song versions,Route inventory only; device acceptance pending
+61,Line-synced lyrics,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+62,Word-by-word Apple Music-style lyrics,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+63,SimpMusic Lyrics (main provider),Not implemented,Not implemented; no new route,Not implemented
+64,LRCLIB lyrics,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+65,BetterLyrics,Not implemented,Not implemented; no new route,Not implemented
+66,Spotify lyrics (login chahiye),Not implemented,Not implemented; no new route,Not implemented
+67,YouTube Transcript lyrics,Not implemented,Not implemented; no new route,Not implemented
+68,LRCLIB se word-by-word highlighting (jab timing available ho),Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+69,Main lyrics provider chunna,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+70,"AI lyrics translation (OpenAI ya Gemini key se, language selectable)",Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+71,Translation ko rate karna,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+72,Lyrics ko upvote/downvote karna,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+73,12 languages ke liye romanization (Japanese dictionary download ke saath),Not implemented,Not implemented; no new route,Not implemented
+74,"Lyrics timing offset (ms), Bluetooth delay ke liye",Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+75,"Lyrics ko image bana ke share/save karna (lines select karke, background ke saath)",Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+76,Landscape fullscreen lyrics,Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+77,"Apni lyrics add karna (line ya word-by-word LRC, validation ke saath)",Added source,"Player → Lyrics → preferred provider, saved LRC, timing, More lyrics tools",Route inventory only; device acceptance pending
+78,"SimpMusic lyrics database mein lyrics contribute karna, anonymous name ke saath",Not implemented,Not implemented; no new route,Not implemented
+79,"Home feed, time ke hisaab se greeting (Good Morning/Evening...)",Added source,Home → Quick picks / Daily discover / Discover; automatic offline fallback,Route inventory only; device acceptance pending
+80,Quick picks,Added source,Home → Quick picks / Daily discover / Discover; automatic offline fallback,Route inventory only; device acceptance pending
+81,"Moods & Genres (Relax, Sleep, Energize, Workout, Party, Focus, Commute...)",Added source,Home → Quick picks / Daily discover / Discover; automatic offline fallback,Route inventory only; device acceptance pending
+82,Charts (Global aur country wise),Partial,Settings → Integrations → Community & charts,Route inventory only; device acceptance pending
+83,SimpMusic Chart,Not implemented,Not implemented; no new route,Not implemented
+84,Podcasts,Added source,Library → Podcasts,Route inventory only; device acceptance pending
+85,New releases (singles aur albums),Added source,"Search → Online catalogue / Songs, artists and albums; provider limits apply",Route inventory only; device acceptance pending
+86,Trending aur Top videos,Implemented,"Search → Online catalogue / Songs, artists and albums; provider limits apply",Route inventory only; device acceptance pending
+87,"""Mix for you""",Added source,Home → Quick picks / Daily discover / Discover; automatic offline fallback,Route inventory only; device acceptance pending
+88,"""Your daily discover"" cards",Added source,Home → Quick picks / Daily discover / Discover; automatic offline fallback,Route inventory only; device acceptance pending
+89,Featured playlists,Partial,Settings → Discovery → Curated playlists / Curator channels,Route inventory only; device acceptance pending
+90,Content country selection,Added source,Settings → Discovery → Country & home feed,Route inventory only; device acceptance pending
+91,Home data fetch limit setting,Added source,Settings → Discovery → Country & home feed,Route inventory only; device acceptance pending
+92,Followed artists ke new release ki notifications,Added source,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+93,Blog post notifications,Added source,Settings → Integrations → YouTube account & blog,Route inventory only; device acceptance pending
+94,"Offline hone par Home par ""Listen to downloaded music"" fallback",Added source,Home → Quick picks / Daily discover / Discover; automatic offline fallback,Route inventory only; device acceptance pending
+95,"Artist page (songs, albums, singles, videos, featured on, about)",Partial,"Search → Online catalogue / Songs, artists and albums; provider limits apply",Route inventory only; device acceptance pending
+96,"Related artists aur ""Fans might also like""",Added source,Settings → Discovery → Related artists,Route inventory only; device acceptance pending
+97,Album aur Playlist detail pages,Added source,"Search → Online catalogue / Songs, artists and albums; provider limits apply",Route inventory only; device acceptance pending
+98,Playlist ke basis par AI song suggestions,Added source,Settings → Integrations → AI playlist suggestions / AI listening recap; also lyrics AI translation,Route inventory only; device acceptance pending
+99,"Songs, artists, albums, playlists, videos sab kuch search karna",Added source,"Search → Online catalogue / Songs, artists and albums; provider limits apply",Route inventory only; device acceptance pending
+100,Search history aur clear karna,Added source,Search → Search history / Suggestions,Route inventory only; device acceptance pending
+101,Search suggestions,Added source,Search → Search history / Suggestions,Route inventory only; device acceptance pending
+102,YouTube/YT Music links ko app mein khol lena,Added source,Android external music link intent (OS entry point),Route inventory only; device acceptance pending
+103,"Aas-paas bajta gaana pehchanna (Shazam-based, Android)",Not implemented,Not implemented; no new route,Not implemented
+104,Recognition ke liye Quick Settings tile,Not implemented,Not implemented; no new route,Not implemented
+105,"Library (Favorites, Downloaded, Playlists, Podcasts, Followed)",Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+106,Local playlists banana,Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+107,"Playlist ka title/thumbnail edit karna, cover crop",Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+108,Playlist delete karna ya usme se song hatana,Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+109,"Sorting (recents, alphabetical, older/newer first, custom order)",Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+110,Local playlist ko YouTube Music se sync karna,Partial,Settings → Integrations → YouTube account & blog,Route inventory only; device acceptance pending
+111,Playlist unsync karna,Added source,Settings → Integrations → YouTube account & blog,Route inventory only; device acceptance pending
+112,"YouTube playlists library mein, offline bhi dikhti rehti hain",Implemented,Settings → Library → Saved YouTube playlists / Public catalogue,Route inventory only; device acceptance pending
+113,Login hone par Favorite ki jagah YouTube Liked use karna,Partial,Settings → Integrations → YouTube account & blog,Route inventory only; device acceptance pending
+114,Song ko YouTube Music par dislike karna (recommend kam hoga),Partial,Settings → Integrations → YouTube account & blog,Route inventory only; device acceptance pending
+115,"Artist follow karna, YouTube channel subscription ke sath sync",Added source,Settings → Integrations → Artist subscriptions; Library → Followed artists,Route inventory only; device acceptance pending
+116,Most Played list,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+117,Multi-select aur bulk actions,Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+118,Spotify/dusre apps se converted playlists import karna,Added source,Settings → Library → Playlist import,Route inventory only; device acceptance pending
+119,"Desktop par library sidebar (playlists, albums, artists, podcasts)",Added source,Desktop companion / native player; see desktop README (not Android settings),Route inventory only; device acceptance pending
+120,Library ke andar search,Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+121,Song/playlist ka URL share karna,Added source,Song ⋮ → Share; Settings → Library → Shareable playlist links,Route inventory only; device acceptance pending
+122,"Favorite albums, playlists aur podcasts save karna",Added source,Library → Collection / Playlists / Manage library; song ⋮ actions,Route inventory only; device acceptance pending
+123,Songs download karke offline sunna,Partial,Library → Offline downloads; Settings → Storage → Offline music / Save direct audio with checksum,Route inventory only; device acceptance pending
+124,"Video download, quality chunne ke saath",Partial,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+125,Download quality setting,Added source,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+126,Like kiye gaane auto-download,Added source,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+127,"Smart downloads (sabse zyada sune gaane downloaded rakhta hai, Wi-Fi par roz refresh)",Added source,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+128,"Download cancel/remove karna, bulk remove bhi",Added source,Library → Offline downloads; Settings → Storage → Offline music / Save direct audio with checksum,Route inventory only; device acceptance pending
+129,"Player cache, size limit ke saath",Added source,Settings → Storage → Playback cache,Route inventory only; device acceptance pending
+130,"Player, downloaded aur thumbnail cache alag alag clear karna, storage overview",Added source,Settings → Storage → Thumbnail & artwork cache / Playback cache / Offline music,Route inventory only; device acceptance pending
+131,Data backup aur restore,Added source,Library → Manage library → Backup / Restore library,Route inventory only; device acceptance pending
+132,Downloaded songs ka data bhi backup karna,Added source,Settings → Storage → Export library + audio / Restore audio archive,Route inventory only; device acceptance pending
+133,"Auto backup (daily/weekly/monthly, last N backups rakho)",Added source,Settings → Storage → Automatic backups,Route inventory only; device acceptance pending
+134,"Phone aur Desktop ka library sync, QR scan karke pair",Not implemented,Not implemented; no new route,Not implemented
+135,"Sync khud hota hai (har 15 min), ""Sync now"" bhi",Not implemented,Not implemented; no new route,Not implemented
+136,Sync apne Wi-Fi ya Tailscale par chalta hai,Not implemented,Not implemented; no new route,Not implemented
+137,Android se Desktop par sign-ins QR se bhejna,Not implemented,Not implemented; no new route,Not implemented
+138,Desktop par browser profile se sign-in import karna,Not implemented,Not implemented; no new route,Not implemented
+139,Dusre device ki settings apply karne ka option,Added source,Settings → Storage → Import settings / Export settings,Route inventory only; device acceptance pending
+140,Multiple YouTube accounts,Not implemented,Not implemented; no new route,Not implemented
+141,"YouTube login, personalized data ke liye",Not implemented,Not implemented; no new route,Not implemented
+142,"""Send back to Google"" (listening history YouTube Music ko bhejna)",Not implemented,Not implemented; no new route,Not implemented
+143,Spotify login (lyrics aur Canvas ke liye),Not implemented,Not implemented; no new route,Not implemented
+144,Discord Rich Presence,Not implemented,Not implemented; no new route,Not implemented
+145,Last.fm scrobbling (Full version),Added source,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+146,SponsorBlock support,Added source,Settings → Integrations → Community & charts,Route inventory only; device acceptance pending
+147,SponsorBlock ki 9 categories alag alag select karna,Added source,Settings → Integrations → Community & charts,Route inventory only; device acceptance pending
+148,Return YouTube Dislike,Added source,Settings → Integrations → Community & charts,Route inventory only; device acceptance pending
+149,Listen Together (friends ke saath sync mein sunna),Partial,Settings → Integrations → Listen Together (server required),Route inventory only; device acceptance pending
+150,"Listen Together host controls (auto-approve, kick, block, host transfer)",Added source,Settings → Integrations → Listen Together (server required),Route inventory only; device acceptance pending
+151,"Rooms Metrolist ke saath compatible, custom server bhi",Partial,Settings → Integrations → Listen Together (server required),Route inventory only; device acceptance pending
+152,Listen Together mein tracks suggest karna,Added source,Settings → Integrations → Listen Together (server required),Route inventory only; device acceptance pending
+153,HTTP/SOCKS proxy (country blocking bypass),Not implemented,Not implemented; no new route,Not implemented
+154,"AI providers: OpenAI, Gemini, custom OpenAI-compatible",Added source,Settings → Integrations → AI playlist suggestions / AI listening recap; also lyrics AI translation,Route inventory only; device acceptance pending
+155,"Custom AI model ID, base URL aur headers",Added source,Settings → Integrations → AI playlist suggestions / AI listening recap; also lyrics AI translation,Route inventory only; device acceptance pending
+156,Manual login ke liye cookie helper,Not implemented,Not implemented; no new route,Not implemented
+157,On-device local listening tracking,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+158,"Analytics screen (7/30/90 din, is saal, date range)",Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+159,"Top songs, artists aur albums",Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+160,Listening clock,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+161,Busiest day/hour aur average per day,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+162,Music by decade,Added source,Settings → Listening insights → Music by decade,Route inventory only; device acceptance pending
+163,"Listening fingerprint (Consistency, Discovery, Diversity, Concentration, Replay)",Added source,Settings → Listening insights → Listening fingerprint,Route inventory only; device acceptance pending
+164,Pichhle period se comparison,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+165,"SimpMusic Wrapped (saal ka recap, share image)",Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+166,"Listener archetypes (Regular, Explorer, Omnivore, Devotee, Deep Diver)",Added source,Settings → Listening insights → Listening fingerprint,Route inventory only; device acceptance pending
+167,Monthly recap playlists,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+168,"Shareable ""listening receipt""",Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+169,"AI se 12 mahine ka music taste reading, share card ke saath",Added source,Settings → Integrations → AI listening recap,Route inventory only; device acceptance pending
+170,Listening history clear karna,Added source,Library → History and analytics / Settings → Listening insights → History & analytics,Route inventory only; device acceptance pending
+171,"Android Auto, online content ke saath",Not implemented,Not implemented; no new route,Not implemented
+172,Turntable home screen widget,Added source,Android launcher widget picker (OS entry point),Route inventory only; device acceptance pending
+173,Playlists widget,Added source,Android launcher widget picker (OS entry point),Route inventory only; device acceptance pending
+174,Listening insights widget,Added source,Android launcher widget picker (OS entry point),Route inventory only; device acceptance pending
+175,App shortcuts,Added source,Android launcher app shortcuts (OS entry point),Route inventory only; device acceptance pending
+176,vivo ke liye Origin Island aur music widget wala alag build,Not implemented,Not implemented; no new route,Not implemented
+177,"Desktop app (Windows, macOS, Linux)",Partial,Desktop companion / native player; see desktop README (not Android settings),Route inventory only; device acceptance pending
+178,Desktop par draggable scrollbars,Added source,Desktop companion / native player; see desktop README (not Android settings),Route inventory only; device acceptance pending
+179,Desktop par mini-player open/close aur Quit actions,Added source,Desktop companion / native player; see desktop README (not Android settings),Route inventory only; device acceptance pending
+180,Media notification controls,Existing source,"Automatic playback service, notification and queue restoration",Route inventory only; device acceptance pending
+181,Light / Dark / System theme,Added source,Settings → Player & appearance → Theme,Route inventory only; device acceptance pending
+182,"Theme colour: Default, Wallpaper (dynamic), Custom",Added source,Settings → Player & appearance → Theme colours,Route inventory only; device acceptance pending
+183,"Spotify, SoundCloud, Apple Music, YouTube Music ke colour presets",Added source,Settings → Player & appearance → Theme colours,Route inventory only; device acceptance pending
+184,"Liquid glass effect (BETA, Android 13+)",Not implemented,Not implemented; no new route,Not implemented
+185,Lagbhag 30 languages (Crowdin se),Not implemented,Not implemented; no new route,Not implemented
+186,Right-to-left languages ka support,Added source,Settings → Player & appearance → Language and RTL,Route inventory only; device acceptance pending
+187,Automatic update check,Implemented,Settings → System & privacy → Update checks,Route inventory only; device acceptance pending
+188,Update channel (stable/nightly),Added source,Settings → System & privacy → Update checks,Route inventory only; device acceptance pending
+189,FOSS version (koi tracker nahi) aur Full version,Added source,Android Studio build variants fossDebug / fullDebug (build-time),Route inventory only; device acceptance pending
+190,Crash reporting (Full mein Sentry) aur in-app crash screen,Added source,Settings → System & privacy → Developer diagnostics / previous crash recovery,Route inventory only; device acceptance pending
+191,"App log viewer (filter, search, live mode, export)",Added source,Settings → System & privacy → Diagnostics,Route inventory only; device acceptance pending
+192,Developer options,Added source,Settings → System & privacy → Developer diagnostics / previous crash recovery,Route inventory only; device acceptance pending
+193,Unofficial/modified build detection,Partial,"Settings → Storage → Downloads and smart downloads (includes release alerts, Last.fm, signing identity)",Route inventory only; device acceptance pending
+194,Third-party libraries aur licences screen,Partial,Settings → System & privacy → Release notes and support,Route inventory only; device acceptance pending
+195,"Agle songs ki smart preloading, fail hone par fresh link se retry",Added source,Settings → Playback → Playback controls,Route inventory only; device acceptance pending
+196,"PipePipe / BravePipe stream extractors, YouTube changes ke baad playback fix",Partial,Automatic stream extraction / playback retry; provider-dependent,Route inventory only; device acceptance pending
+197,"Visitor data aur DataSyncId retrieval, personalization ke liye",Not implemented,Not implemented; no new route,Not implemented
+198,Thumbnail aur Spotify Canvas cache management,Partial,Settings → Storage → Thumbnail & artwork cache / Playback cache / Offline music,Route inventory only; device acceptance pending
+199,Developer blog aur support links ka in-app access,Added source,Settings → System & privacy → Release notes and support,Route inventory only; device acceptance pending
+200,"Poora open-source project, LICENSE file ke saath",Not implemented,Not implemented; no new route,Not implemented

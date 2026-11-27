@@ -1,0 +1,7 @@
+<resources>
+    <color name="palette_green">#08783E</color>
+    <color name="palette_orange">#A94700</color>
+    <color name="palette_pink">#B62254</color>
+    <color name="palette_red">#8E8E93</color>
+    <color name="palette_on_primary">#FFFFFF</color>
+</resources>

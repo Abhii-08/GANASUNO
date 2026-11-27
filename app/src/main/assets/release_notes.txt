@@ -1,0 +1,26 @@
+GANASUNO 30.0 — UI integration
+Home, Search, Library, Player and Settings navigation. 70 grouped searchable settings routes, song actions, artwork swipe. APK/device testing pending. See docs/V30_UI_ROUTE_AUDIT.csv for routes and limitations.
+
+# GANASUNO 28.0 — Offline automation and release alerts
+
+Target 150 source-implemented features: not reached. Seven formerly missing areas received source changes. Five added source implementations (#92, #125, #126, #127, #145), two partial (#124, #193). Carried-forward report: 142 implemented/existing, 26 partial, 32 missing. Counts reflect the source report, not independently audited or runtime-verified features.
+
+## Usage
+Settings → More features → Batch 28 · offline automation and release alerts.
+- Register authorized audio variants for a currently playing track, one line per bitrate and direct HTTPS URL (`128 https://example.org/track.mp3`). Use only files you have permission to save; do not register secret URLs. Select independent preferred download bitrate; closest declared variant wins. Manual save displays actual/estimated bitrate where available. Existing downloaded copies are retained; changing preference does not automatically replace copies.
+- Favourite auto-download and daily smart downloads are opt-in, disabled by default, unmetered Wi-Fi only. Automatic jobs add missing registered files (top 20 most-played for smart downloads, five new transfers per run, 400 MiB start threshold and 100 MiB max per file). Android can defer jobs. No automatic deletion or stream-service downloads. Removing a saved copy while leaving its registration and automation enabled makes it eligible again. Forget the registration to prevent that.
+- Authorized video: select requested resolution, supply matching direct MP4 URL, download to temporary private cache (200 MiB max), check video track and height, then choose a document destination. Actual height may differ; no transcoding or platform variant discovery. Interrupted export can leave an incomplete document at the chosen destination. Old staging files are cleaned at app startup.
+- Followed artist releases: supply maintainer email, search and confirm MusicBrainz artist identity. Watch up to 20 artists; first successful lookup establishes baseline; daily checks notify about new release groups dated in the last 30 days. Grant notification permission, and use Check now to verify. Catalogue completeness and release dates depend on MusicBrainz.
+- Last.fm (Full edition only): explicit opt-in; enter your own API key, secret and previously authorized session key. Credentials are process memory only; sends track title/artist/album/duration/start timestamp for eligible active playback (duration >30 seconds, half duration or four minutes). No historical upload, offline retry queue or automatic retries after ambiguous errors. Disconnect stops future submissions; a request already in flight may finish. See https://www.last.fm/api/scrobbling and https://www.last.fm/api/authspec.
+- Signing identity: compare installed certificate SHA-256 against an independently obtained expected set. No trusted reference bundled; matching signature is not proof of unmodified code.
+
+## Validation
+- 36 standalone Kotlin assertions compiled and executed (Batch21.kt, Batch28.kt, V28BatchTest.kt).
+- 102 Android Kotlin source files parsed using Kotlin PSI, zero syntax errors. Not Android type checking.
+- 32 XML resources parsed; 38 backend and 13 desktop Python regression tests passed.
+- Android SDK unavailable; no Android Gradle build, emulator, live Last.fm/MusicBrainz requests, background JobScheduler, video or audio runtime tests. Existing statuses are carried forward and not re-audited in this release.
+
+## Build and acceptance
+Use JDK 17 and Android SDK 36. From Windows terminal: `gradlew.bat assembleFossDebug assembleFullDebug --stacktrace`. Test manual download with controlled HTTPS audio and MP4 files of known sizes; invalid MIME, restricted hosts, cancellation, duplicate registrations, missing files, changing quality, disabling automation, Wi-Fi vs cellular. Enable and test jobs on a device; check artist baseline then new release and revoked notification permission. In Full edition test a separately authorized Last.fm session and confirm scrobble on your account; verify Privacy edition never sends scrobbles. Test signature match and mismatch with independent certificate fingerprints. Do not publish as a runtime-verified release before these checks.
+
+References: https://musicbrainz.org/doc/MusicBrainz_API/Search/ReleaseGroupSearch ; https://www.last.fm/api/show/track.scrobble ; https://www.last.fm/api/scrobbling ; https://www.last.fm/api/authspec

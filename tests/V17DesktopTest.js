@@ -1,0 +1,3 @@
+const assert=require('node:assert/strict');const {groupSaved}=require('../desktop/groups.js');
+const a={name:'a.mp3',size:1,lastModified:2},b={name:'b.mp3',size:2,lastModified:3};const rows=[{files:[a,b],albums:['Album','Show'],artists:['Artist','Host'],kinds:['music','podcast']},{files:[a],albums:['album'],artists:['artist']}];
+assert.equal(groupSaved(rows,'album').length,2);assert.equal(groupSaved(rows,'artist','ART').length,1);assert.equal(groupSaved(rows,'artist','art')[0].items.length,1);assert.equal(groupSaved(rows,'podcast')[0].title,'Show');assert.equal(groupSaved(rows,'podcast')[0].items[0].name,'b.mp3');assert.deepEqual(groupSaved(rows,'artist','none'),[]);console.log('6 desktop group assertions passed');
