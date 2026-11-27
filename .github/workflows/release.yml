@@ -59,19 +59,23 @@ jobs:
           keyfile="$RUNNER_TEMP/ganasuno-signing.jks"
           trap 'rm -f "$keyfile"' EXIT
           printf '%s' "$SIGNING_KEYSTORE_B64" | base64 --decode > "$keyfile"
-          tools=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          tools="$ANDROID_HOME/build-tools/36.0.0"
+          if [[ ! -x "$tools/apksigner" ]]; then sdkmanager "build-tools;36.0.0"; fi
           apk=app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk
           test -f "$apk"
           "$tools/zipalign" -P 16 -f 4 "$apk" "$RUNNER_TEMP/aligned.apk"
           "$tools/apksigner" sign --ks "$keyfile" --ks-key-alias "$SIGNING_KEY_ALIAS" --ks-pass env:SIGNING_STORE_PASSWORD --key-pass env:SIGNING_KEY_PASSWORD --out GANASUNO.apk "$RUNNER_TEMP/aligned.apk"
-          cert=$("$tools/apksigner" verify --verbose --print-certs GANASUNO.apk)
+          "$tools/apksigner" verify --verbose --print-certs GANASUNO.apk | tee "$RUNNER_TEMP/certificate.txt"
           expected_cert=${RELEASE_CERT_SHA256,,}
           expected_cert=${expected_cert//:/}
-          [[ "$expected_cert" =~ ^[a-f0-9]{64}$ ]]
-          actual_cert=$(sed -n 's/^Signer #[0-9]* certificate SHA-256 digest: //p' <<< "$cert")
-          [[ "$actual_cert" == "$expected_cert" ]]
-          badging=$("$tools/aapt" dump badging GANASUNO.apk)
-          grep -F "package: name='com.abhi.ganasuno' versionCode='$VERSION_CODE' versionName='$VERSION_NAME'" <<< "$badging"
+          [[ "$expected_cert" =~ ^[a-f0-9]{64}$ ]] || { echo "::error::Expected a configured APK signer SHA-256 pin"; exit 1; }
+          actual_cert=$(sed -En 's/^Signer #[0-9]+ certificate SHA-256 digest:[[:space:]]*([[:xdigit:]]+).*/\1/p' "$RUNNER_TEMP/certificate.txt")
+          actual_cert=$(printf '%s' "$actual_cert" | tr '[:upper:]' '[:lower:]')
+          [[ "$actual_cert" == "$expected_cert" ]] || { echo "::error::Signed APK certificate does not match the configured public pin"; exit 1; }
+          "$tools/aapt" dump badging GANASUNO.apk > "$RUNNER_TEMP/badging.txt" || { echo "::error::Could not read signed APK metadata"; exit 1; }
+          package=$(grep -m 1 '^package:' "$RUNNER_TEMP/badging.txt")
+          printf '%s\n' "$package"
+          [[ "$package" == *"name='com.abhi.ganasuno'"* && "$package" == *"versionCode='$VERSION_CODE'"* && "$package" == *"versionName='$VERSION_NAME'"* ]] || { echo "::error::APK package or version mismatch"; exit 1; }
           cp GANASUNO.apk "GANASUNO-v$VERSION_NAME-universal.apk"
           sha256sum GANASUNO.apk "GANASUNO-v$VERSION_NAME-universal.apk" "Corresponding-Source-v$VERSION_NAME.zip" > SHA256SUMS.txt
       - name: Publish release

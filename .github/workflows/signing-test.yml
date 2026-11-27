@@ -43,7 +43,8 @@ jobs:
 
           printf '%s' "$SIGNING_KEYSTORE_B64" | base64 --decode > "$KEYSTORE"
 
-          TOOLS=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+          TOOLS="$ANDROID_HOME/build-tools/36.0.0"
+          if [[ ! -x "$TOOLS/apksigner" ]]; then sdkmanager "build-tools;36.0.0"; fi
 
           "$TOOLS/zipalign" -P 16 -f 4 app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk aligned.apk
 
@@ -54,18 +55,22 @@ jobs:
             --key-pass env:SIGNING_KEY_PASSWORD \
             --out GANASUNO.apk aligned.apk
 
-          cert=$("$TOOLS/apksigner" verify --verbose --print-certs GANASUNO.apk)
-          actual=$(sed -n 's/^Signer #[0-9]* certificate SHA-256 digest: //p' <<< "$cert")
-          [[ "$actual" =~ ^[a-f0-9]{64}$ ]]
+          "$TOOLS/apksigner" verify --verbose --print-certs GANASUNO.apk | tee "$RUNNER_TEMP/certificate.txt"
+          actual=$(sed -En 's/^Signer #[0-9]+ certificate SHA-256 digest:[[:space:]]*([[:xdigit:]]+).*/\1/p' "$RUNNER_TEMP/certificate.txt")
+          actual=$(printf '%s' "$actual" | tr '[:upper:]' '[:lower:]')
+          [[ "$actual" =~ ^[a-fA-F0-9]{64}$ ]] || { echo "::error::Expected exactly one APK signer SHA-256 digest"; exit 1; }
           expected=${RELEASE_CERT_SHA256,,}
           expected=${expected//:/}
           if [[ -n "$expected" ]]; then
-            [[ "$actual" == "$expected" ]]
+            [[ "$actual" == "$expected" ]] || { echo "::error::Signed APK certificate does not match the configured public pin"; exit 1; }
           fi
           version=$(sed -n 's/^[[:space:]]*versionName = "\([0-9.]*\)".*/\1/p' app/build.gradle.kts)
           code=$(sed -n 's/^[[:space:]]*versionCode = \([0-9]*\).*/\1/p' app/build.gradle.kts)
-          badging=$("$TOOLS/aapt" dump badging GANASUNO.apk)
-          grep -F "package: name='com.abhi.ganasuno' versionCode='$code' versionName='$version'" <<< "$badging"
+          [[ "$version" =~ ^[0-9]+(\.[0-9]+)+$ && "$code" =~ ^[1-9][0-9]*$ ]] || { echo "::error::Could not read the configured application version"; exit 1; }
+          "$TOOLS/aapt" dump badging GANASUNO.apk > "$RUNNER_TEMP/badging.txt" || { echo "::error::Could not read signed APK metadata"; exit 1; }
+          package=$(grep -m 1 '^package:' "$RUNNER_TEMP/badging.txt")
+          printf '%s\n' "$package"
+          [[ "$package" == *"name='com.abhi.ganasuno'"* && "$package" == *"versionCode='$code'"* && "$package" == *"versionName='$version'"* ]] || { echo "::error::APK package or version mismatch"; exit 1; }
           printf 'Public signer SHA-256: %s\n' "$actual"
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
