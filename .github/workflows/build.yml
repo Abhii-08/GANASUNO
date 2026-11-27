@@ -18,5 +18,5 @@ jobs:
       - run: ./gradlew assembleFossDebug assembleFullDebug --stacktrace
       - uses: actions/upload-artifact@v4
         with:
-          name: ganasuno-debug-apk
+          name: GANASUNO-APK
           path: app/build/outputs/apk/*/debug/*.apk
