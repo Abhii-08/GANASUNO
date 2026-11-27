@@ -25,3 +25,15 @@
 - [ ] Review historical Actions logs and artifacts, triage the redacted dependency archive scan findings before committing source inputs and finish signed device update tests. Obtain explicit approval before enabling `RELEASE_APPROVED`, pushing a release tag or making the repository public.
 
 - [x] Recovered and bundled Rhino 1.8.1's two NOTICE files, OkHttp 4.12.0's Public Suffix List NOTICE, and the shared Apache license from six exact AndroidX source coordinates.
+
+
+## v1.1 source-review evidence
+
+- [x] Rechecked all 85 staged source records against public upstream evidence. All 78 Maven source deliveries matched published checksums and all seven GitHub archive mappings matched the upstream ZIP SHA-256. There are 83 code-bearing coordinates plus the metadata-only Guava marker.
+- [x] Mapped all 84 resolved coordinates into a local review ZIP and verified each reviewed input's SHA-256. The excluded test-file list is included. The nine remaining redacted scanner matches in the Desugar tree are verified crypto algorithm or key-exchange identifiers. Original flagged archives were not shipped in the review ZIP.
+- [x] Built the FOSS unsigned APK from a fresh extraction using JDK 17 and the existing pinned Maven artifact cache. This demonstrates the application rebuild path.
+- [x] Verified that the OkHttp 4.12.0 Public Suffix List resource in the signed APK byte-matches the tagged upstream resource. The tagged MPL 2.0 source list independently regenerates the same uncompressed rule data. The review ZIP includes that list, the tagged generator and exact notices. [Pinned OkHttp source](https://github.com/square/okhttp/tree/4984568367caaf359b82c452bd28b5e192824d1c)
+- [x] Recovered the exact R8 BSD 3-Clause text from the NIO configuration JAR. It matches the R8 2.1.5 release preparation commit. Staged that commit's human-readable NIO configuration and packaging scripts. [R8 source](https://r8.googlesource.com/r8/+/c331a820ddae7dea41f41a04375b784486d0f705)
+- [ ] Establish that each source publication includes the preferred form, build and generation inputs, and changes needed for the exact packaged components. The extracted build consumes the pinned dependency binaries. Still verify the human-to-machine NIO configuration conversion, the exact conversion build and the OpenJDK-to-DEX release inputs.
+- [ ] Complete the remaining per-artifact copyright and NOTICE review and original SimpMusic file-lineage evidence. Record Apache NOTICE as applicable, MIT and BSD notices, complete MPL covered source and notices, and the exact desugaring exceptions. Existing evidence includes the root GPL text, the pinned upstream GPL licenses, Rhino notices, the OkHttp Public Suffix List notice and six AndroidX source license matches.
+- [ ] After completing those checks, commit the distribution-ready source archives and the exact workflow manifest at `docs/licenses/CORRESPONDING-SOURCE-SHA256SUMS.txt`. The review checksum list under `build/corresponding-source-audit/` is deliberately separate from the workflow manifest.
