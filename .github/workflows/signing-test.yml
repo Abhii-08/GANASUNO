@@ -1,0 +1,54 @@
+name: GANASUNO Signing Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  signing-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Release APK
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleFossRelease --stacktrace
+
+      - name: Sign and Verify APK
+        shell: bash
+        env:
+          SIGNING_KEYSTORE_B64: ${{ secrets.SIGNING_KEYSTORE_B64 }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          KEYSTORE="$RUNNER_TEMP/ganasuno.jks"
+          trap 'rm -f "$KEYSTORE"' EXIT
+
+          printf '%s' "$SIGNING_KEYSTORE_B64" | base64 --decode > "$KEYSTORE"
+
+          TOOLS=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)
+
+          "$TOOLS/zipalign" -P 16 -f 4 app/build/outputs/apk/foss/release/app-foss-release-unsigned.apk aligned.apk
+
+          "$TOOLS/apksigner" sign \
+            --ks "$KEYSTORE" \
+            --ks-key-alias "$SIGNING_KEY_ALIAS" \
+            --ks-pass env:SIGNING_STORE_PASSWORD \
+            --key-pass env:SIGNING_KEY_PASSWORD \
+            --out GANASUNO.apk aligned.apk
+
+          "$TOOLS/apksigner" verify --verbose --print-certs GANASUNO.apk
